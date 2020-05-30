@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
 import { ProfilePage } from "./profile.page";
-import { AuthService } from "../../shared/auth.service";
+import { AuthService } from "../../../shared/auth.service";
 
 const routes: Routes = [
   {

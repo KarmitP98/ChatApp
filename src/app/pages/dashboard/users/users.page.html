@@ -1,0 +1,18 @@
+<ion-header>
+    <ion-toolbar color = "primary">
+        <ion-title>Users</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf = "users">
+    <ion-card (click) = "presentActionSheet(user)"
+              *ngFor = "let user of users;let i = index;"
+              style = "cursor: pointer; background: #3a7be0;">
+        <ion-card-header>
+            <ion-card-title style = "color: white">{{i}}.
+                {{user.userName}}</ion-card-title>
+            <ion-card-subtitle
+                    style = "color: white">{{user.userEmail}}</ion-card-subtitle>
+        </ion-card-header>
+    </ion-card>
+</ion-content>

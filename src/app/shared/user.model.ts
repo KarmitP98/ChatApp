@@ -3,6 +3,7 @@ export class User {
         public userId: string,
         public userName: string,
         public userEmail: string,
-        public userPassword: string
+        public userPassword: string,
+        public chatIds: string[]
     ) {}
 }

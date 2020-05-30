@@ -1,0 +1,43 @@
+<ion-header>
+    <ion-toolbar color = "primary">
+        <ion-title color = "primary" style = "color: white">Chats</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <ion-fab edge horizontal = "end" slot = "fixed" vertical = "top">
+        <ion-fab-button color = "light">
+            <ion-icon color = "primary" name = "ellipsis-vertical"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list>
+            <ion-fab-button color = "primary" routerLink = "/dashboard/users">
+                <ion-icon name = "file-tray-stacked"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button color = "primary" routerLink = "/dashboard/profile">
+                <ion-icon name = "finger-print"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button color = "primary">
+                <ion-icon name = "add"></ion-icon>
+            </ion-fab-button>
+        </ion-fab-list>
+    </ion-fab>
+
+    <ion-list>
+        <!--        <ion-item *ngFor = "let chat of chats">-->
+        <!--            <h3>{{chat.user2}}</h3>-->
+        <!--            <h4>{{chat.lastMessage | slice: 0: 15}}</h4>-->
+        <!--        </ion-item>-->
+        <ion-item *ngFor = "let n of nums">
+            <ion-avatar slot = "start">
+                <img src = "./assets/default-pro-pic.jpg"></ion-avatar>
+            <ion-label>
+                <h3><b>Yash</b></h3>
+                <h4>Great Guy</h4>
+                <p>We are talk stuff and even more stuff and even more stuff
+                   and then more stuff</p>
+            </ion-label>
+        </ion-item>
+
+    </ion-list>
+</ion-content>

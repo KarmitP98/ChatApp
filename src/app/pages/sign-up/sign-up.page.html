@@ -1,6 +1,6 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-title>Sign Up</ion-title>
+    <ion-toolbar color = "primary">
+        <ion-title style = "color: white">Sign Up</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -8,20 +8,25 @@
     <ion-item>
         <ion-label position = "floating">User Name</ion-label>
         <ion-input #name [(ngModel)] = "userName" placeholder = "User Name"
-                   required type = "text"></ion-input>
+                   clearInput = "true" required type = "text">
+        </ion-input>
+        <ion-icon name = "person" slot = "end"></ion-icon>
     </ion-item>
     <ion-item>
         <ion-label position = "floating">Email</ion-label>
         <ion-input #email [(ngModel)] = "userEmail" email placeholder = "Email"
-                   required type = "email"></ion-input>
+                   clearInput = "true" required type = "email"></ion-input>
+        <ion-icon name = "mail" slot = "end"></ion-icon>
     </ion-item>
     <ion-item>
         <ion-label position = "floating">Password</ion-label>
         <ion-input #password [(ngModel)] = "userPassword" minlength = "6"
                    placeholder = "Password" required
-                   type = "password"></ion-input>
+                   clearInput = "true" type = "password"></ion-input>
+        <ion-icon name = "eye-off" slot = "end"></ion-icon>
     </ion-item>
-
+    <p style = "color: #3a7be0">Back to <a
+            routerLink = "/login"><b>Login</b></a></p>
     <ion-button (click) = "signUp()" color = "primary" type = "submit">
         Sign -Up
     </ion-button>

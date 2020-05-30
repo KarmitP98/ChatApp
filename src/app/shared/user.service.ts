@@ -64,7 +64,7 @@ export class UserService {
 
 
     fetchChats( child: string, value: string ) {
-        this.store.list<ChatModel>( "chats", ref => ref.orderByChild( child ).equalTo( value ) ).valueChanges();
+        return this.store.list<ChatModel>( "chats", ref => ref.orderByChild( child ).equalTo( value ) ).valueChanges();
     }
 
     addChat( value: ChatModel ) {
@@ -79,9 +79,9 @@ export class UserService {
     }
 
     sendText( value: TextModel ) {
-        this.store.list<TextModel>( "chats/" + value.chatId ).push( value ).then( value1 => {
-            value.textId = value1.key;
-            this.updateText( value1.key, value );
+        return this.store.list<TextModel>( "chats/" + value.chatId ).push( value ).then( value1 => {
+            // @ts-ignore
+            this.store.list<ChatModel>( "chats/" + value.chatId ).update( "lastMessage", value.content );
         } );
     }
 

@@ -1,6 +1,5 @@
 export class TextModel {
-    constructor( public textId: string,
-                 public chatId: string,
+    constructor( public chatId: string,
                  public from: string,
                  public to: string,
                  public content: string,

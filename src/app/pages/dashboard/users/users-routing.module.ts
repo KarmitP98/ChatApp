@@ -1,13 +1,14 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { ChatsPage } from "./chats.page";
-import { AuthService } from "../../shared/auth.service";
+import { UsersPage } from "./users.page";
+import { AuthService } from "../../../shared/auth.service";
 
 const routes: Routes = [
   {
     path: "",
-    component: ChatsPage, canActivate: [ AuthService ]
+    component: UsersPage,
+    canActivate: [ AuthService ]
   }
 ];
 
@@ -15,4 +16,4 @@ const routes: Routes = [
              imports: [ RouterModule.forChild( routes ) ],
              exports: [ RouterModule ]
            } )
-export class ChatsPageRoutingModule {}
+export class UsersPageRoutingModule {}

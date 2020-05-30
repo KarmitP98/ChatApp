@@ -1,0 +1,19 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Profile</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class = "ion-align-items-center" style = "margin-top: 20%;height:
+80%">
+    <ion-card *ngIf = "user">
+        <ion-card-header>
+            <ion-card-title>{{user.userName}}</ion-card-title>
+            <ion-card-subtitle>{{user.userEmail}}</ion-card-subtitle>
+        </ion-card-header>
+    </ion-card>
+
+    <div class = "ion-text-center">
+        <ion-button (click) = "logOut()" color = "danger">Log out</ion-button>
+    </div>
+</ion-content>

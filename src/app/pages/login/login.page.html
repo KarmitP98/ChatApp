@@ -1,0 +1,32 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Login</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen] = "true" class = "ion-text-center">
+
+    <ion-item>
+        <ion-label position = "floating">Email</ion-label>
+        <ion-input [(ngModel)] = "email" email
+                   placeholder = "Enter your email" required
+                   type = "email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+        <ion-label position = "floating">Password</ion-label>
+        <ion-input [(ngModel)] = "password" minlength = "6"
+                   placeholder = "Enter your password" required
+                   type = "password">
+        </ion-input>
+    </ion-item>
+    <div>
+        <p style = "color: #4c8dff"> Don't have an account? Try
+            <a href = "/signUp"><b style = "color: #3a7be0">Sign-up</b></a></p>
+        <ion-button (click) = "addUser()" type = "submit"> Sign in
+        </ion-button>
+    </div>
+
+</ion-content>
+

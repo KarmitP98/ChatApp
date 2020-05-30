@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "chat-application-b01b5": {
+      "hosting": {
+        "app": [
+          "chat-application-b01b5"
+        ]
+      }
+    }
+  }
+}

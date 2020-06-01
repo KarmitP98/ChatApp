@@ -13,7 +13,6 @@ export class LoginPage implements OnInit {
     constructor( private us: UserService ) { }
 
     ngOnInit() {
-        // this.us.fetchUsers().subscribe( value => console.log( value ) );
     }
 
     addUser() {

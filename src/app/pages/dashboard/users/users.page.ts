@@ -3,6 +3,9 @@ import { User } from "../../../shared/user.model";
 import { Subscription } from "rxjs";
 import { UserService } from "../../../shared/user.service";
 import { ActionSheetController } from "@ionic/angular";
+import { ChatModel } from "../../../shared/chat.model";
+import { Router } from "@angular/router";
+import { AngularFireDatabase } from "@angular/fire/database";
 
 @Component( {
                 selector: "app-users",
@@ -11,16 +14,18 @@ import { ActionSheetController } from "@ionic/angular";
             } )
 export class UsersPage implements OnInit, OnDestroy {
     users: User[];
+    user: User;
 
     userSub: Subscription;
     uss: Subscription;
 
-    constructor( private us: UserService, private  actionSheetController: ActionSheetController ) { }
+    constructor( private us: UserService, private  actionSheetController: ActionSheetController, private router: Router, private store: AngularFireDatabase ) { }
 
     ngOnInit() {
 
         this.uss = this.us.userSubject.subscribe( u => {
             if ( u ) {
+                this.user = u;
                 this.userSub = this.us.fetchUsers().subscribe( value => {
                     if ( value ) {
                         this.users = value.filter( value1 => {return value1.userName !== u.userName;} );
@@ -40,12 +45,13 @@ export class UsersPage implements OnInit, OnDestroy {
         const actionSheet = await this.actionSheetController.create(
             {
                 header: user.userName,
-                cssClass: "my-custom-class",
+                cssClass: "custom-action-white",
                 buttons: [ {
                     text: "Start Chat",
                     icon: "chatbubble-ellipses",
                     handler: () => {
-                        console.log( "Delete clicked" );
+                        this.startChat( user );
+                        console.log( "Chat Clicked" );
                     }
                 }, {
                     text: "Call",
@@ -75,5 +81,31 @@ export class UsersPage implements OnInit, OnDestroy {
                 } ]
             } );
         await actionSheet.present();
+    }
+
+    startChat( user2: User ) {
+        let result: string[];
+        if ( this.user.chatIds ) {
+            if ( this.user.chatIds.length > 0 ) {
+                result = this.user.chatIds.filter( value => user2.chatIds.some( value1 => value === value1 ) );
+            }
+        }
+
+        if ( result ) {
+            this.router.navigate( [ "/chat", result[0] ] );
+        } else {
+            const chatId = this.store.createPushId();
+            console.log( chatId );
+            let chat = new ChatModel( "temp", "", [] );
+            this.us.addChat( chat );
+            this.user.chatIds ? console.log( "Chat ids exists" ) : this.user.chatIds = [];
+            this.user.chatIds.push( chatId );
+            this.us.updateUser( this.user.userId, this.user );
+
+            user2.chatIds ? console.log( "Chat ids exists" ) : user2.chatIds = [];
+            this.us.updateUser( user2.userId, user2 );
+
+            this.router.navigate( [ "/chat", chatId ] );
+        }
     }
 }

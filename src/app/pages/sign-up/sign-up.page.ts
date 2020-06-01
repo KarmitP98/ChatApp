@@ -18,6 +18,6 @@ export class SignUpPage implements OnInit {
     }
 
     signUp(): void {
-        this.us.signUp( this.userEmail, this.userPassword, new User( "temp", this.userName, this.userEmail, this.userPassword ) );
+        this.us.signUp( this.userEmail, this.userPassword, new User( "temp", this.userName, this.userEmail, this.userPassword, [] ) );
     }
 }

@@ -1,9 +1,24 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-title>chat</ion-title>
+    <ion-toolbar color = "primary">
+        <ion-icon (click) = "goBack()" name = "arrow-back"
+                  slot = "start"
+                  style = "margin-left: 5%"></ion-icon>
+        <ion-title *ngIf = "user2" style = "color: white">
+            <ion-label>{{user2.userName}}</ion-label>
+        </ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
 </ion-content>
+
+<ion-footer>
+    <ion-item>
+        <ion-input [(ngModel)] = "data" color = "primary"
+                   placeholder = "Enter a text"
+                   style = "border-radius: 10px"></ion-input>
+        <ion-icon (click) = "presentToast()" color = "primary"
+                  name = "paper-plane"
+                  slot = "end"></ion-icon>
+    </ion-item>
+</ion-footer>

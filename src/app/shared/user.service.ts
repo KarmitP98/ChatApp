@@ -7,7 +7,7 @@ import { Router } from "@angular/router";
 import { BehaviorSubject } from "rxjs";
 import { AngularFireAuth } from "@angular/fire/auth";
 import * as firebase from "firebase";
-
+import { ToastController } from "@ionic/angular";
 
 export interface AuthResponseData {
     kind: string;
@@ -34,14 +34,20 @@ export class UserModel {
     }
 }
 
+
 @Injectable( {
                  providedIn: "root"
              } )
 export class UserService {
+
     userSubject = new BehaviorSubject<User>( null );
     private tokenExpirationTimer: any;
+    firestore = firebase.firestore();
 
-    constructor( private store: AngularFireDatabase, private router: Router, private auth: AngularFireAuth ) { }
+    constructor( private store: AngularFireDatabase,
+                 private router: Router,
+                 private auth: AngularFireAuth,
+                 private toastController: ToastController ) { }
 
     fetchUsers( child1?: string, value1?: string ) {
         if ( child1 ) {
@@ -52,10 +58,10 @@ export class UserService {
     }
 
     addUser( value: User ) {
-        this.store.list<User>( "users" ).push( value ).then( value1 => {
-            value.userId = value1.key;
-            this.updateUser( value1.key, value );
-        } );
+        value.userId = this.store.createPushId();
+        this.store.list<User>( "users" ).push( value );
+        console.log( value );
+        this.firestore.collection( "users" ).add( { ...value } );
     }
 
     updateUser( userId: string, user: User ) {
@@ -68,10 +74,9 @@ export class UserService {
     }
 
     addChat( value: ChatModel ) {
-        this.store.list<ChatModel>( "chats" ).push( value ).then( value1 => {
-            value.chatId = value1.key;
-            this.updateChat( value1.key, value );
-        } );
+        value.chatId = this.store.createPushId();
+        this.store.list<ChatModel>( "chats" ).push( value );
+        this.firestore.collection( "chats" ).add( { ...value } );
     }
 
     updateChat( chatId: string, value: ChatModel ) {
@@ -79,10 +84,8 @@ export class UserService {
     }
 
     sendText( value: TextModel ) {
-        return this.store.list<TextModel>( "chats/" + value.chatId ).push( value ).then( value1 => {
-            // @ts-ignore
-            this.store.list<ChatModel>( "chats/" + value.chatId ).update( "lastMessage", value.content );
-        } );
+        value.textId = this.store.createPushId();
+        return this.store.list<TextModel>( "chats/" + value.chatId ).push( value );
     }
 
     updateText( textId: string, value: TextModel ) {
@@ -130,6 +133,14 @@ export class UserService {
             sub.unsubscribe();
         } );
 
+    }
+
+    async presentToast() {
+        const toast = await this.toastController.create( {
+                                                             message: "Your settings have been saved.",
+                                                             duration: 2000
+                                                         } );
+        toast.present();
     }
 
 }

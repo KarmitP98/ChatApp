@@ -9,12 +9,12 @@ import { UserPageRoutingModule } from "./dashboard-routing.module";
 import { DashboardPage } from "./dashboard.page";
 
 @NgModule( {
-             imports: [
-               CommonModule,
-               FormsModule,
-               IonicModule,
-               UserPageRoutingModule
-             ],
-             declarations: [ DashboardPage ]
+               imports: [
+                   CommonModule,
+                   FormsModule,
+                   IonicModule,
+                   UserPageRoutingModule
+               ],
+               declarations: [ DashboardPage ]
            } )
 export class DashboardModule {}

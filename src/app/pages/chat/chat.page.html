@@ -10,6 +10,16 @@
 </ion-header>
 
 <ion-content>
+    <div *ngIf = "messages.length === 0">
+        <ion-card>
+            <ion-card-content>No messages yet!</ion-card-content>
+        </ion-card>
+    </div>
+    <div *ngIf = "messages.length > 0">
+        <ion-item *ngFor = "let message of messages">
+            <ion-label> {{ message.content }} </ion-label>
+        </ion-item>
+    </div>
 </ion-content>
 
 <ion-footer>

@@ -2,12 +2,13 @@ import { Injectable } from "@angular/core";
 import { AngularFireDatabase } from "@angular/fire/database";
 import { User } from "./user.model";
 import { ChatModel } from "./chat.model";
-import { TextModel } from "./text.model";
 import { Router } from "@angular/router";
 import { BehaviorSubject } from "rxjs";
 import { AngularFireAuth } from "@angular/fire/auth";
-import * as firebase from "firebase";
 import { ToastController } from "@ionic/angular";
+import { AngularFirestore } from "@angular/fire/firestore";
+import { TextModel } from "./text.model";
+import firebase from "firebase";
 
 export interface AuthResponseData {
     kind: string;
@@ -34,6 +35,25 @@ export class UserModel {
     }
 }
 
+export class Toast {
+
+    private tc = new ToastController();
+
+    constructor(
+        public text: string,
+        public milliseconds: number = 2000 ) {
+    }
+
+    async show() {
+        const toast = await this.tc
+                                .create( {
+                                             message: this.text,
+                                             duration: this.milliseconds
+                                         } );
+        await toast.present();
+    }
+
+}
 
 @Injectable( {
                  providedIn: "root"
@@ -41,82 +61,44 @@ export class UserModel {
 export class UserService {
 
     userSubject = new BehaviorSubject<User>( null );
+    userRef = this.afs.collection<User>( "users" );
+    chatRef = this.afs.collection<ChatModel>( "chats" );
     private tokenExpirationTimer: any;
-    firestore = firebase.firestore();
 
     constructor( private store: AngularFireDatabase,
                  private router: Router,
                  private auth: AngularFireAuth,
-                 private toastController: ToastController ) { }
+                 private afs: AngularFirestore,
+                 private toastController: ToastController,
+                 private fireAuth: AngularFireAuth ) { }
 
-    fetchUsers( child1?: string, value1?: string ) {
-        if ( child1 ) {
-            return this.store.list<User>( "users", ref => ref.orderByChild( child1 ).equalTo( value1 ) ).valueChanges();
-        } else {
-            return this.store.list<User>( "users" ).valueChanges();
-        }
-    }
-
-    addUser( value: User ) {
-        value.userId = this.store.createPushId();
-        this.store.list<User>( "users" ).push( value );
-        console.log( value );
-        this.firestore.collection( "users" ).add( { ...value } );
-    }
-
-    updateUser( userId: string, user: User ) {
-        this.store.list<User>( "users" ).update( userId, user );
-    }
-
-
-    fetchChats( child: string, value: string ) {
-        return this.store.list<ChatModel>( "chats", ref => ref.orderByChild( child ).equalTo( value ) ).valueChanges();
-    }
-
-    addChat( value: ChatModel ) {
-        value.chatId = this.store.createPushId();
-        this.store.list<ChatModel>( "chats" ).push( value );
-        this.firestore.collection( "chats" ).add( { ...value } );
-    }
-
-    updateChat( chatId: string, value: ChatModel ) {
-        this.store.list<ChatModel>( "chats" ).update( chatId, value );
-    }
-
-    sendText( value: TextModel ) {
-        value.textId = this.store.createPushId();
-        return this.store.list<TextModel>( "chats/" + value.chatId ).push( value );
-    }
-
-    updateText( textId: string, value: TextModel ) {
-        this.store.list<TextModel>( "chats/" + value.chatId ).update( textId, value );
-    }
 
     login( email: string, password: string ) {
-        firebase.auth().signInWithEmailAndPassword( email, password ).catch().then( () => {
-            let sub = this.fetchUsers( "userEmail", email ).subscribe( value => {
-                this.userSubject.next( value[0] );
-                localStorage.setItem( "userData", JSON.stringify( value[0].userEmail ) );
-                this.router.navigate( [ "/dashboard" ] );
+        this.fireAuth.signInWithEmailAndPassword( email, password ).then( ( userModel ) => {
+            let sub = this.afs.collection( "users" ).doc( email ).valueChanges().subscribe( ( value: User ) => {
+                this.userSubject.next( value );
+                localStorage.setItem( "userData", JSON.stringify( value.userEmail ) );
+                this.router.navigate( [ "/dashboard" ] )
+                    .then( () => console.log( value.userName + " has logged in!" ) );
                 sub.unsubscribe();
             } );
-        } );
+        } ).catch( () => new Toast( "Invalid user credentials!", 2000 ).show() );
     }
 
     signUp( email: string, password: string, user: User ) {
-        firebase.auth().createUserWithEmailAndPassword( email, password ).catch().then( () => {
-            this.addUser( user );
-            this.userSubject.next( user );
-            localStorage.setItem( "userData", JSON.stringify( user.userEmail ) );
-            this.router.navigate( [ "/dashboard" ] );
-        } );
+        this.fireAuth
+            .createUserWithEmailAndPassword( email, password )
+            .catch( function( error ) {
+                console.log( "User could not be added!" );
+            } );
+        this.addNewUser( user );
     }
 
     logout(): void {
-        firebase.auth().signOut().then( value => {
+        this.fireAuth.signOut().then( value => {
             this.userSubject.next( null );  // Clear current subject
             localStorage.removeItem( "userData" );  // Clear local storage
-            this.router.navigate( [ "/login" ] );
+            this.router.navigate( [ "/login" ] ).then( () => console.log( "User has been logged in!" ) );
         } ).catch();
 
     }
@@ -135,12 +117,85 @@ export class UserService {
 
     }
 
-    async presentToast() {
-        const toast = await this.toastController.create( {
-                                                             message: "Your settings have been saved.",
-                                                             duration: 2000
-                                                         } );
-        toast.present();
+    fetchUsers( child1?: string, value1?: string ) {
+        if ( child1 ) {
+            return this.afs.collection<User>( "users", ref => ref.where( child1, "==", value1 ) ).valueChanges();
+        }
+        return this.userRef.valueChanges();
+    }
+
+    addNewUser( value: User ) {
+        this.afs.collection( "users" )
+            .doc( value.userEmail )
+            .set( { userName: value.userName, userEmail: value.userEmail, userPassword: value.userPassword, chatIds: value.chatIds } )
+            .then( () => {
+                console.log( "User has been added" );
+                this.userSubject.next( value );
+                localStorage.setItem( "userData", JSON.stringify( value.userEmail ) );
+                this.router.navigate( [ "/dashboard" ] ).then( () => console.log( "New User has signed up!" ) );
+            } )
+            .catch(
+                function( error ) {
+                    console.log( "User cannot be added! " );
+                    console.log( error.text + error.id );
+                } );
+    }
+
+    updateUser( user: User ) {
+        this.userRef
+            .doc( user.userEmail )
+            .update( user )
+            .then( () => console.log( user.userEmail + " has been updated!" ) );
+    }
+
+
+    fetchChats( child?: string, value?: string ) {
+        if ( child ) {
+            return this.afs.collection( "chats" ).doc( value ).valueChanges();
+        }
+        return this.afs.collection( "chats" ).valueChanges();
+    }
+
+    createNewChat( chatModel: ChatModel ) {
+        const chatId = chatModel.chatId;
+        this.afs.collection<ChatModel>( "chats" )
+            .doc( chatId )
+            .set( { ...chatModel } )
+            .then( () => console.log( "New Chat with Id: " + chatId + " has been created!" ) )
+            .catch( ( error ) => console.log( "This chat could not be created!" ) );
+    }
+
+    updateChat( chatId: string, value: ChatModel ) {
+        this.afs.collection<ChatModel>( "chats" )
+            .doc( chatId )
+            .update( value )
+            .then( () => "Chat has been updated!" )
+            .catch( () => "Chat was not updated!" );
+    }
+
+    deleteChat( chatId: string ) {
+        this.afs.collection( "chats" )
+            .doc( chatId )
+            .delete()
+            .then( () => "Chat has been deleted!" )
+            .catch( () => "Chat cannot be deleted!" );
+    }
+
+    sendText( value: TextModel ) {
+        value.textId = this.afs.createId();
+        this.afs.collection<ChatModel>( "chats" )
+            .doc( value.chatId )
+            .update( { messages: firebase.firestore.FieldValue.arrayUnion( value ) } )
+            .then( () => console.log( "Text has been sent!" ) )
+            .catch( () => new Toast( "Text could not be sent!", 1000 ).show() );
+    }
+
+    updateText( textId: string, value: TextModel ) {
+        this.afs.collection<ChatModel>( "chats/" + value.chatId + "/" )
+            .doc( "messages/" + textId )
+            .update( value )
+            .then( () => console.log( "Text was updated!" ) )
+            .catch( () => console.log( "Text could not be updated!" ) );
     }
 
 }

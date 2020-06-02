@@ -3,42 +3,47 @@ import { User } from "../../../shared/user.model";
 import { Subscription } from "rxjs";
 import { UserService } from "../../../shared/user.service";
 import { ActionSheetController } from "@ionic/angular";
+import { AngularFirestore } from "@angular/fire/firestore";
+import { untilDestroyed } from "@orchestrator/ngx-until-destroyed";
+import { leftLoadTrigger, opacityTrigger } from "../../../shared/shared";
 import { ChatModel } from "../../../shared/chat.model";
 import { Router } from "@angular/router";
-import { AngularFireDatabase } from "@angular/fire/database";
 
 @Component( {
                 selector: "app-users",
                 templateUrl: "./users.page.html",
-                styleUrls: [ "./users.page.scss" ]
+                styleUrls: [ "./users.page.scss" ],
+                animations: [ leftLoadTrigger, opacityTrigger ]
             } )
 export class UsersPage implements OnInit, OnDestroy {
-    users: User[];
+    users: User[] = [];
     user: User;
 
     userSub: Subscription;
     uss: Subscription;
 
-    constructor( private us: UserService, private  actionSheetController: ActionSheetController, private router: Router, private store: AngularFireDatabase ) { }
+    constructor( private us: UserService, private  actionSheetController: ActionSheetController, private afs: AngularFirestore, private router: Router ) { }
 
     ngOnInit() {
 
-        this.uss = this.us.userSubject.subscribe( u => {
+        this.us.userSubject.pipe( untilDestroyed( this ) ).subscribe( u => {
             if ( u ) {
                 this.user = u;
-                this.userSub = this.us.fetchUsers().subscribe( value => {
-                    if ( value ) {
-                        this.users = value.filter( value1 => {return value1.userName !== u.userName;} );
-                    }
-                } );
+                this.us.fetchUsers()
+                    .pipe( untilDestroyed( this ) )
+                    .subscribe( ( value: User[] ) => {
+                        if ( value.length > 0 ) {
+                            this.users = value.filter( value1 => {return value1.userName !== u.userName;} );
+                        } else {
+                            console.log( "No user found! | Length: " + this.users.length );
+                        }
+                    } );
             }
         } );
 
     }
 
     ngOnDestroy(): void {
-        this.userSub.unsubscribe();
-        this.uss.unsubscribe();
     }
 
     async presentActionSheet( user: User ) {
@@ -51,7 +56,6 @@ export class UsersPage implements OnInit, OnDestroy {
                     icon: "chatbubble-ellipses",
                     handler: () => {
                         this.startChat( user );
-                        console.log( "Chat Clicked" );
                     }
                 }, {
                     text: "Call",
@@ -83,29 +87,35 @@ export class UsersPage implements OnInit, OnDestroy {
         await actionSheet.present();
     }
 
-    startChat( user2: User ) {
-        let result: string[];
-        if ( this.user.chatIds ) {
-            if ( this.user.chatIds.length > 0 ) {
-                result = this.user.chatIds.filter( value => user2.chatIds.some( value1 => value === value1 ) );
+    startChat( other: User ) {
+        console.log( "Chat pressed!" );
+
+        const hasChatted = this.user.chatIds.some( value => value.with === other.userEmail );
+        if ( hasChatted ) {
+            for ( let id of this.user.chatIds ) {
+                if ( id.with === other.userEmail ) {
+                    console.log( id.chatId );
+                    this.router.navigate( [ "chat", id.chatId ] )
+                        .then( () => console.log( this.user.userName + " continued chatting with " + other.userName ) );
+                }
             }
-        }
-
-        if ( result ) {
-            this.router.navigate( [ "/chat", result[0] ] );
         } else {
-            const chatId = this.store.createPushId();
-            console.log( chatId );
-            let chat = new ChatModel( "temp", "", [] );
-            this.us.addChat( chat );
-            this.user.chatIds ? console.log( "Chat ids exists" ) : this.user.chatIds = [];
-            this.user.chatIds.push( chatId );
-            this.us.updateUser( this.user.userId, this.user );
+            const chat: ChatModel = {
+                chatId: this.user.userEmail + "-" + other.userEmail,
+                between: [ this.user.userEmail, other.userEmail ],
+                lastMessage: "",
+                messages: []
+            };
+            this.us.createNewChat( chat );
 
-            user2.chatIds ? console.log( "Chat ids exists" ) : user2.chatIds = [];
-            this.us.updateUser( user2.userId, user2 );
+            this.user.chatIds.push( { chatId: chat.chatId, with: other.userEmail } );
+            other.chatIds.push( { chatId: chat.chatId, with: this.user.userEmail } );
 
-            this.router.navigate( [ "/chat", chatId ] );
+            this.us.updateUser( this.user );
+            this.us.updateUser( other );
+
+            this.router.navigate( [ "chat", chat.chatId ] )
+                .then( () => console.log( this.user.userName + " started chatting with " + other.userName ) );
         }
     }
 }

@@ -5,14 +5,14 @@ import { ProfilePage } from "./profile.page";
 import { AuthService } from "../../../shared/auth.service";
 
 const routes: Routes = [
-  {
-    path: "",
-    component: ProfilePage, canActivate: [ AuthService ]
-  }
+    {
+        path: "",
+        component: ProfilePage, canActivate: [ AuthService ]
+    }
 ];
 
 @NgModule( {
-             imports: [ RouterModule.forChild( routes ) ],
-             exports: [ RouterModule ]
+               imports: [ RouterModule.forChild( routes ) ],
+               exports: [ RouterModule ]
            } )
 export class ProfilePageRoutingModule {}

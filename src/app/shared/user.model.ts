@@ -1,9 +1,8 @@
 export class User {
     constructor(
-        public userId: string,
         public userName: string,
         public userEmail: string,
         public userPassword: string,
-        public chatIds: string[]
+        public chatIds: { chatId: string, with: string }[]
     ) {}
 }

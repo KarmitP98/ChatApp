@@ -9,15 +9,15 @@
 
     <ion-item>
         <ion-label position = "floating">Email</ion-label>
-        <ion-input [(ngModel)] = "email" email
-                   autocomplete = "on" required
+        <ion-input [(ngModel)] = "email" autocomplete = "on"
+                   email required
                    type = "email"></ion-input>
     </ion-item>
 
     <ion-item>
         <ion-label position = "floating">Password</ion-label>
-        <ion-input [(ngModel)] = "password" minlength = "6"
-                   autocomplete = "on" required
+        <ion-input [(ngModel)] = "password" autocomplete = "on"
+                   minlength = "6" required
                    type = "password">
         </ion-input>
     </ion-item>
@@ -25,7 +25,7 @@
         <p style = "color: #4c8dff"> Don't have an account? Try
             <a routerLink = "/signUp">
                 <b style = "color: #3a7be0">Sign-up</b></a></p>
-        <ion-button (click) = "addUser()" type = "submit"> Sign in
+        <ion-button (click) = "login()" type = "submit"> Sign in
         </ion-button>
     </div>
 

@@ -1,15 +1,15 @@
 import { Component, OnInit } from "@angular/core";
 
 @Component( {
-              selector: "app-user",
-              templateUrl: "./dashboard.page.html",
-              styleUrls: [ "./dashboard.page.scss" ]
+                selector: "app-user",
+                templateUrl: "./dashboard.page.html",
+                styleUrls: [ "./dashboard.page.scss" ]
             } )
 export class DashboardPage implements OnInit {
 
-  constructor() { }
+    constructor() { }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+    }
 
 }

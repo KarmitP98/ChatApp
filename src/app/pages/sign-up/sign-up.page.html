@@ -7,22 +7,22 @@
 <ion-content class = "ion-text-center" fullscreen = "true">
     <ion-item>
         <ion-label position = "floating">User Name</ion-label>
-        <ion-input #name [(ngModel)] = "userName" placeholder = "User Name"
-                   clearInput = "true" required type = "text">
+        <ion-input #name [(ngModel)] = "userName" clearInput = "true"
+                   placeholder = "User Name" required type = "text">
         </ion-input>
         <ion-icon name = "person" slot = "end"></ion-icon>
     </ion-item>
     <ion-item>
         <ion-label position = "floating">Email</ion-label>
-        <ion-input #email [(ngModel)] = "userEmail" email placeholder = "Email"
-                   clearInput = "true" required type = "email"></ion-input>
+        <ion-input #email [(ngModel)] = "userEmail" clearInput = "true" email
+                   placeholder = "Email" required type = "email"></ion-input>
         <ion-icon name = "mail" slot = "end"></ion-icon>
     </ion-item>
     <ion-item>
         <ion-label position = "floating">Password</ion-label>
-        <ion-input #password [(ngModel)] = "userPassword" minlength = "6"
-                   placeholder = "Password" required
-                   clearInput = "true" type = "password"></ion-input>
+        <ion-input #password [(ngModel)] = "userPassword" clearInput = "true"
+                   minlength = "6" placeholder = "Password"
+                   required type = "password"></ion-input>
         <ion-icon name = "eye-off" slot = "end"></ion-icon>
     </ion-item>
     <p style = "color: #3a7be0">Back to <a

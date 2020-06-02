@@ -23,21 +23,32 @@
         </ion-fab-list>
     </ion-fab>
 
-    <ion-list>
-        <!--        <ion-item *ngFor = "let chat of chats">-->
-        <!--            <h3>{{chat.user2}}</h3>-->
-        <!--            <h4>{{chat.lastMessage | slice: 0: 15}}</h4>-->
-        <!--        </ion-item>-->
-        <ion-item *ngFor = "let n of nums">
-            <ion-avatar slot = "start">
-                <img src = "./assets/default-pro-pic.jpg"></ion-avatar>
-            <ion-label>
-                <h3><b>Yash</b></h3>
-                <h4>Great Guy</h4>
-                <p>We are talk stuff and even more stuff and even more stuff
-                   and then more stuff</p>
-            </ion-label>
-        </ion-item>
+    <div *ngIf = "chats.length > 0" [@slideLeft]>
+        <ion-list>
+            <ion-list>
+                <ion-item *ngFor = "let chat of chats">
+                    <ion-avatar slot = "start">
+                        <img src = "./assets/default-pro-pic.jpg">
+                    </ion-avatar>
+                    <ion-label>
+                        <h2>{{chat.otherUser}}</h2>
+                        <p>{{chat.lastMessage | slice: 0: 15}}</p>
+                    </ion-label>
+                </ion-item>
+            </ion-list>
+        </ion-list>
+    </div>
 
-    </ion-list>
+    <div *ngIf = "chats.length === 0" [@opacityUp]>
+        <div class = "container" style = "height: 100%; margin-top: auto;
+        margin-bottom: auto;">
+            <ion-card>
+                <ion-card-content color = "primary">
+                    Try being a human...<br>
+                    <b routerLink = "/dashboard/users">Talk
+                                                       to people!</b>
+                </ion-card-content>
+            </ion-card>
+        </div>
+    </div>
 </ion-content>

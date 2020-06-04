@@ -29,6 +29,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
                    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
                    AngularFirestore
                ],
+               exports: [],
                bootstrap: [ AppComponent ]
            } )
 export class AppModule {}

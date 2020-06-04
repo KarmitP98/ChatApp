@@ -1,23 +1,27 @@
 <ion-header>
     <ion-toolbar color = "primary">
-        <ion-title>Users</ion-title>
+        <ion-title>Contacts</ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen = "true">
     <div *ngIf = "users.length > 0" [@slideLeft]>
-        <ion-card (click) = "presentActionSheet(user)"
-                  *ngFor = "let user of users;let i = index;"
-                  style = "cursor: pointer; background: #3a7be0;">
-            <ion-card-header>
-                <ion-card-title style = "color: white">{{i}}.
-                    {{user.userName}}
-                </ion-card-title>
-                <ion-card-subtitle
-                        style = "color: white">{{user.userEmail}}
-                </ion-card-subtitle>
-            </ion-card-header>
-        </ion-card>
+        <ion-searchbar animated></ion-searchbar>
+        <ion-list>
+            <ion-list-header>Contacts</ion-list-header>
+            <ion-item (click) = "presentActionSheet(user)"
+                      *ngFor = "let user of users;let i = index;"
+                      lines = "full">
+                <ion-avatar slot = "end">
+                    <img src = "./assets/default-pro-pic.jpg">
+                </ion-avatar>
+                <ion-label>
+                    <h2>{{user.userName}}</h2>
+                    <h3>{{user.userEmail}}</h3>
+                    <!--                    <p>Listen, I've had a pretty messed up day...</p>-->
+                </ion-label>
+            </ion-item>
+        </ion-list>
     </div>
     <div *ngIf = "users.length === 0" [@opacityUp]>
         <ion-card>

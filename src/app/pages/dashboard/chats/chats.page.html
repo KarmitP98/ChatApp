@@ -25,17 +25,27 @@
 
     <div *ngIf = "chats.length > 0" [@slideLeft]>
         <ion-list>
-            <ion-list>
-                <ion-item *ngFor = "let chat of chats">
+            <ion-item-sliding *ngFor = "let chat of chats" lines = "full">
+                <ion-item (click) = "startChat(chat)">
                     <ion-avatar slot = "start">
                         <img src = "./assets/default-pro-pic.jpg">
                     </ion-avatar>
                     <ion-label>
                         <h2>{{chat.otherUser}}</h2>
-                        <p>{{chat.lastMessage | slice: 0: 15}}</p>
+                        <h3>{{chat.lastMessage.content | shorten }}</h3>
+                        <ion-badge *ngIf = "chat.unread > 0"
+                                   color = "warning">{{chat.unread}}</ion-badge>
                     </ion-label>
                 </ion-item>
-            </ion-list>
+                <ion-item-options side = "end">
+                    <ion-item-option (click) = "delete(chat)"
+                                     color = "danger">
+                        <ion-icon name = "trash-outline">
+                            Delete
+                        </ion-icon>
+                    </ion-item-option>
+                </ion-item-options>
+            </ion-item-sliding>
         </ion-list>
     </div>
 

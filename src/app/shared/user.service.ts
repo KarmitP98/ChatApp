@@ -8,7 +8,6 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import { ToastController } from "@ionic/angular";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { TextModel } from "./text.model";
-import firebase from "firebase";
 
 export interface AuthResponseData {
     kind: string;
@@ -165,10 +164,10 @@ export class UserService {
             .catch( ( error ) => console.log( "This chat could not be created!" ) );
     }
 
-    updateChat( chatId: string, value: ChatModel ) {
+    updateChat( chat: ChatModel ) {
         this.afs.collection<ChatModel>( "chats" )
-            .doc( chatId )
-            .update( value )
+            .doc( chat.chatId )
+            .update( chat )
             .then( () => "Chat has been updated!" )
             .catch( () => "Chat was not updated!" );
     }
@@ -181,15 +180,15 @@ export class UserService {
             .catch( () => "Chat cannot be deleted!" );
     }
 
-    sendText( value: TextModel ) {
-        value.textId = this.afs.createId();
-        this.afs.collection<ChatModel>( "chats" )
-            .doc( value.chatId )
-            .update( { messages: firebase.firestore.FieldValue.arrayUnion( value ) } )
-            .then( () => console.log( "Text has been sent!" ) )
-            .catch( () => new Toast( "Text could not be sent!", 1000 ).show() );
-    }
-
+    // sendText( value: TextModel ) {
+    //     value.textId = this.afs.createId();
+    //     this.afs.collection<ChatModel>( "chats" )
+    //         .doc( value.chatId )
+    //         .update( { messages: firestore.FieldValue.arrayUnion( value ) } )
+    //         .then( () => console.log( "Text has been sent!" ) )
+    //         .catch( () => new Toast( "Text could not be sent!", 1000 ).show() );
+    // }
+    //
     updateText( textId: string, value: TextModel ) {
         this.afs.collection<ChatModel>( "chats/" + value.chatId + "/" )
             .doc( "messages/" + textId )

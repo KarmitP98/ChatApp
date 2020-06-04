@@ -1,6 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { UserService } from "../../shared/user.service";
 import { AngularFireAuth } from "@angular/fire/auth";
+import { NgForm } from "@angular/forms";
 
 @Component( {
                 selector: "app-login",
@@ -10,6 +11,7 @@ import { AngularFireAuth } from "@angular/fire/auth";
 export class LoginPage implements OnInit {
     email: string;
     password: string;
+    @ViewChild( "f", { static: false } ) f: NgForm;
 
     constructor( private us: UserService, private auth: AngularFireAuth ) { }
 
@@ -24,6 +26,7 @@ export class LoginPage implements OnInit {
 
     login() {
         this.us.login( this.email, this.password );
+        this.f.resetForm();
     }
 
 

@@ -7,6 +7,7 @@ import { ToastController } from "@ionic/angular";
 import { ChatModel } from "../../shared/chat.model";
 import { untilDestroyed } from "@orchestrator/ngx-until-destroyed";
 import { TextModel } from "../../shared/text.model";
+import { TEXT_STATUS } from "../../shared/shared";
 
 @Component( {
                 selector: "app-chat",
@@ -18,7 +19,7 @@ export class ChatPage implements OnInit, OnDestroy {
     user: User;
     user2: User;
     chatId: string;
-    data: string;
+    text: string;
     chat: ChatModel;
     messages: TextModel[] = [];
 
@@ -43,12 +44,19 @@ export class ChatPage implements OnInit, OnDestroy {
                 this.user2 = value[0];
             } );
 
-
         this.us.fetchChats( "chatId", this.chatId )
             .pipe( untilDestroyed( this ) )
             .subscribe( ( value: ChatModel ) => {
                 this.chat = value;
+                this.messages = this.chat.messages;
+                for ( let message of this.chat.messages ) {
+                    if ( message.to === this.user.userName ) {
+                        message.status = TEXT_STATUS.read;
+                    }
+                }
+                this.us.updateChat( this.chat );
             } );
+
 
     }
 
@@ -71,11 +79,22 @@ export class ChatPage implements OnInit, OnDestroy {
             .then( () => console.log( "Chatting has stopped!" ) );
     }
 
-    async presentToast() {
-        const toast = await this.toastController.create( {
-                                                             message: "Your settings have been saved.",
-                                                             duration: 2000
-                                                         } );
-        await toast.present();
+    sentText(): void {
+        if ( this.text.length > 0 ) {
+            const text: TextModel = {
+                chatId: this.chatId,
+                textId: "Random",
+                content: this.text,
+                to: this.user2.userName,
+                from: this.user.userName,
+                status: TEXT_STATUS.sent,
+                timeStamp: new Date()
+            };
+
+            this.chat.messages.push( text );
+            this.chat.lastMessage = this.text;
+            this.us.updateChat( this.chat );
+            this.text = "";
+        }
     }
 }

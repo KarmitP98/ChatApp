@@ -16,19 +16,55 @@
         </ion-card>
     </div>
     <div *ngIf = "messages.length > 0">
-        <ion-item *ngFor = "let message of messages">
-            <ion-label> {{ message.content }} </ion-label>
-        </ion-item>
+        <ion-list lines = "none">
+            <ion-item *ngFor = "let message of messages"
+                      slot = "start"
+                      style = "width: 100%;">
+                <ion-avatar
+                        [slot] = "message.from === user.userName ? 'end': 'start'">
+                    <img alt = "Default Pro Pic"
+                         src = "./assets/default-pro-pic.jpg">
+                </ion-avatar>
+                <ion-label [ngClass] = "message.from === user.userName ?
+                    'yellow-background' : 'blue-background'">
+                    <h5>
+                        <b>
+                            {{message.from}}
+                        </b>
+                    </h5>
+                    <p>
+                        {{message.content}}
+
+                    </p>
+                    <div style = "width: 100%; text-align: right">
+                        <ion-icon *ngIf = "message.status === 'Sent' &&
+                              message.from === user.userName"
+                                  name = "checkmark-outline">
+                        </ion-icon>
+                        <ion-icon *ngIf = "message.status === 'Received' ||
+                                  message.status === 'Read' &&
+                              message.from === user.userName"
+                                  [color] = "message.status === 'Read' ?
+                                  'primary' : ''"
+                                  name = "checkmark-done-outline">
+                        </ion-icon>
+                    </div>
+                </ion-label>
+            </ion-item>
+        </ion-list>
     </div>
 </ion-content>
 
 <ion-footer>
-    <ion-item>
-        <ion-input [(ngModel)] = "data" color = "primary"
-                   placeholder = "Enter a text"
-                   style = "border-radius: 10px"></ion-input>
-        <ion-icon (click) = "presentToast()" color = "primary"
-                  name = "paper-plane"
-                  slot = "end"></ion-icon>
-    </ion-item>
+    <form #f = "ngForm" (ngSubmit) = "sentText()">
+        <ion-item>
+            <ion-input (keydown.enter) = "sentText()" [(ngModel)] = "text"
+                       color = "primary" name = "text"
+                       placeholder = "Enter a text"
+                       style = "border-radius: 10px"></ion-input>
+            <ion-icon (click) = "sentText()" color = "primary"
+                      name = "paper-plane"
+                      slot = "end"></ion-icon>
+        </ion-item>
+    </form>
 </ion-footer>

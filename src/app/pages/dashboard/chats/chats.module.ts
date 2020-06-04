@@ -7,6 +7,7 @@ import { IonicModule } from "@ionic/angular";
 import { ChatsPageRoutingModule } from "./chats-routing.module";
 
 import { ChatsPage } from "./chats.page";
+import { ShortenPipe } from "../../../shared/shorten.pipe";
 
 @NgModule( {
                imports: [
@@ -15,6 +16,7 @@ import { ChatsPage } from "./chats.page";
                    IonicModule,
                    ChatsPageRoutingModule
                ],
-               declarations: [ ChatsPage ]
+               declarations: [ ChatsPage,
+                               ShortenPipe ]
            } )
 export class ChatsPageModule {}

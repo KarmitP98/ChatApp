@@ -1,7 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { UserService } from "../../shared/user.service";
 import { User } from "../../shared/user.model";
-import { AngularFirestore } from "@angular/fire/firestore";
+import { NgForm } from "@angular/forms";
 
 @Component( {
                 selector: "app-sign-up",
@@ -12,13 +12,15 @@ export class SignUpPage implements OnInit {
     userName: string;
     userPassword: string;
     userEmail: string;
+    @ViewChild( "f", { static: false } ) f: NgForm;
 
-    constructor( private us: UserService, private afs: AngularFirestore ) { }
+    constructor( private us: UserService ) { }
 
     ngOnInit() {
     }
 
     signUp(): void {
         this.us.signUp( this.userEmail, this.userPassword, new User( this.userName, this.userEmail, this.userPassword, [] ) );
+        this.f.resetForm();
     }
 }

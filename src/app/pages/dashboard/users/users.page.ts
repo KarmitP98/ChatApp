@@ -102,14 +102,14 @@ export class UsersPage implements OnInit, OnDestroy {
         } else {
             const chat: ChatModel = {
                 chatId: this.user.userEmail + "-" + other.userEmail,
-                between: [ this.user.userEmail, other.userEmail ],
+                between: [ this.user.userName, other.userName ],
                 lastMessage: "",
                 messages: []
             };
             this.us.createNewChat( chat );
 
-            this.user.chatIds.push( { chatId: chat.chatId, with: other.userEmail } );
-            other.chatIds.push( { chatId: chat.chatId, with: this.user.userEmail } );
+            this.user.chatIds.push( { chatId: chat.chatId, with: other.userName } );
+            other.chatIds.push( { chatId: chat.chatId, with: this.user.userName } );
 
             this.us.updateUser( this.user );
             this.us.updateUser( other );

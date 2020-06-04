@@ -6,7 +6,7 @@
 
 
 <ion-content [fullscreen] = "true" class = "ion-text-center">
-    <form #f = "ngForm">
+    <form #f = "ngForm" (ngSubmit) = "login()">
         <ion-item>
             <ion-label position = "floating">Email</ion-label>
             <ion-input [(ngModel)] = "email" autocomplete = "on"
@@ -27,7 +27,7 @@
             <p style = "color: #4c8dff"> Don't have an account? Try
                 <a routerLink = "/signUp">
                     <b style = "color: #3a7be0">Sign-up</b></a></p>
-            <ion-button (click) = "login()" type = "submit"> Sign in
+            <ion-button type = "submit"> Sign in
             </ion-button>
         </div>
     </form>

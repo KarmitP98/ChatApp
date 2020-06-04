@@ -35,10 +35,10 @@ export class ChatPage implements OnInit, OnDestroy {
             } );
 
         this.chatId = this.route.snapshot.params["id"];
-        const userEmails = this.chatId.split( "-" );
-        const userEmail2 = userEmails.filter( value => value !== this.user.userEmail )[0];
+        const userIds = this.chatId.split( "-" );
+        const userId2 = userIds.filter( value => value !== this.user.userId )[0];
 
-        this.us.fetchUsers( "userEmail", userEmail2 )
+        this.us.fetchUsers( "userId", userId2 )
             .pipe( untilDestroyed( this ) )
             .subscribe( value => {
                 this.user2 = value[0];
@@ -46,15 +46,17 @@ export class ChatPage implements OnInit, OnDestroy {
 
         this.us.fetchChats( "chatId", this.chatId )
             .pipe( untilDestroyed( this ) )
-            .subscribe( ( value: ChatModel ) => {
-                this.chat = value;
-                this.messages = this.chat.messages;
-                for ( let message of this.chat.messages ) {
-                    if ( message.to === this.user.userName ) {
-                        message.status = TEXT_STATUS.read;
+            .subscribe( ( value ) => {
+                if ( value.length > 0 ) {
+                    this.chat = value[0];
+                    this.messages = this.chat.messages;
+                    for ( let message of this.chat.messages ) {
+                        if ( message.to === this.user.userName ) {
+                            message.status = TEXT_STATUS.read;
+                        }
                     }
+                    this.us.updateChat( this.chat );
                 }
-                this.us.updateChat( this.chat );
             } );
 
 

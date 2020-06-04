@@ -33,7 +33,7 @@ export class UsersPage implements OnInit, OnDestroy {
                     .pipe( untilDestroyed( this ) )
                     .subscribe( ( value: User[] ) => {
                         if ( value.length > 0 ) {
-                            this.users = value.filter( value1 => {return value1.userName !== u.userName;} );
+                            this.users = value.filter( value1 => {return value1.userId !== u.userId;} );
                         } else {
                             console.log( "No user found! | Length: " + this.users.length );
                         }
@@ -101,7 +101,7 @@ export class UsersPage implements OnInit, OnDestroy {
             }
         } else {
             const chat: ChatModel = {
-                chatId: this.user.userEmail + "-" + other.userEmail,
+                chatId: this.user.userId + "-" + other.userId,
                 between: [ this.user.userName, other.userName ],
                 lastMessage: "",
                 messages: []

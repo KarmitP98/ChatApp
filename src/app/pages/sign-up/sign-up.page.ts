@@ -12,7 +12,8 @@ export class SignUpPage implements OnInit {
     userName: string;
     userPassword: string;
     userEmail: string;
-    @ViewChild( "f", { static: false } ) f: NgForm;
+    @ViewChild( "f", { static: false } ) form: NgForm;
+    phone: number;
 
     constructor( private us: UserService ) { }
 
@@ -20,7 +21,8 @@ export class SignUpPage implements OnInit {
     }
 
     signUp(): void {
-        this.us.signUp( this.userEmail, this.userPassword, new User( this.userName, this.userEmail, this.userPassword, [] ) );
-        this.f.resetForm();
+        this.us.signUp( this.userEmail, this.userPassword,
+                        new User( "", this.userName, this.userEmail, this.userPassword, this.phone, [] ) );
+        this.form.resetForm();
     }
 }

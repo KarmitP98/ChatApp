@@ -25,8 +25,8 @@
 
     <div *ngIf = "chats.length > 0" [@slideLeft]>
         <ion-list>
-            <ion-item-sliding *ngFor = "let chat of chats" lines = "full">
-                <ion-item (click) = "startChat(chat)">
+            <ion-item-sliding *ngFor = "let chat of chats">
+                <ion-item (click) = "startChat(chat)" lines = "full">
                     <ion-avatar slot = "start">
                         <img src = "./assets/default-pro-pic.jpg">
                     </ion-avatar>

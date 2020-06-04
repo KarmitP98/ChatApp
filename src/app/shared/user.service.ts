@@ -73,15 +73,16 @@ export class UserService {
 
 
     login( email: string, password: string ) {
-        this.fireAuth.signInWithEmailAndPassword( email, password ).then( ( userModel ) => {
-            let sub = this.afs.collection( "users" ).doc( email ).valueChanges().subscribe( ( value: User ) => {
-                this.userSubject.next( value );
-                localStorage.setItem( "userData", JSON.stringify( value.userEmail ) );
-                this.router.navigate( [ "/dashboard" ] )
-                    .then( () => console.log( value.userName + " has logged in!" ) );
-                sub.unsubscribe();
-            } );
-        } ).catch( () => new Toast( "Invalid user credentials!", 2000 ).show() );
+        this.fireAuth.signInWithEmailAndPassword( email, password )
+            .then( () => {
+                let sub = this.fetchUsers( "userEmail", email ).subscribe( ( value: User[] ) => {
+                    this.userSubject.next( value[0] );
+                    localStorage.setItem( "userData", JSON.stringify( value[0].userEmail ) );
+                    this.router.navigate( [ "/dashboard" ] )
+                        .then( () => console.log( value[0].userName + " has logged in!" ) );
+                    sub.unsubscribe();
+                } );
+            } ).catch( () => new Toast( "Invalid user credentials!", 2000 ).show() );
     }
 
     signUp( email: string, password: string, user: User ) {
@@ -89,8 +90,8 @@ export class UserService {
             .createUserWithEmailAndPassword( email, password )
             .catch( function( error ) {
                 console.log( "User could not be added!" );
-            } );
-        this.addNewUser( user );
+            } )
+            .then( () => this.addNewUser( user ) );
     }
 
     logout(): void {
@@ -116,21 +117,22 @@ export class UserService {
 
     }
 
-    fetchUsers( child1?: string, value1?: string ) {
-        if ( child1 ) {
-            return this.afs.collection<User>( "users", ref => ref.where( child1, "==", value1 ) ).valueChanges();
+    fetchUsers( child?: string, value?: string | number | Date ) {
+        if ( child ) {
+            return this.afs.collection<User>( "users", ref => ref.where( child, "==", value ) ).valueChanges();
         }
         return this.userRef.valueChanges();
     }
 
-    addNewUser( value: User ) {
+    addNewUser( user: User ) {
+        user.userId = this.afs.createId();
         this.afs.collection( "users" )
-            .doc( value.userEmail )
-            .set( { userName: value.userName, userEmail: value.userEmail, userPassword: value.userPassword, chatIds: value.chatIds } )
+            .doc( user.userId )
+            .set( { ...user } )
             .then( () => {
                 console.log( "User has been added" );
-                this.userSubject.next( value );
-                localStorage.setItem( "userData", JSON.stringify( value.userEmail ) );
+                this.userSubject.next( user );
+                localStorage.setItem( "userData", JSON.stringify( user.userEmail ) );
                 this.router.navigate( [ "/dashboard" ] ).then( () => console.log( "New User has signed up!" ) );
             } )
             .catch(
@@ -142,17 +144,17 @@ export class UserService {
 
     updateUser( user: User ) {
         this.userRef
-            .doc( user.userEmail )
+            .doc( user.userId )
             .update( user )
             .then( () => console.log( user.userEmail + " has been updated!" ) );
     }
 
 
-    fetchChats( child?: string, value?: string ) {
+    fetchChats( child?: string, value?: string | number | Date ) {
         if ( child ) {
-            return this.afs.collection( "chats" ).doc( value ).valueChanges();
+            return this.afs.collection<ChatModel>( "chats", ref => ref.where( child, "==", value ) ).valueChanges();
         }
-        return this.afs.collection( "chats" ).valueChanges();
+        return this.afs.collection<ChatModel>( "chats" ).valueChanges();
     }
 
     createNewChat( chatModel: ChatModel ) {
@@ -161,7 +163,7 @@ export class UserService {
             .doc( chatId )
             .set( { ...chatModel } )
             .then( () => console.log( "New Chat with Id: " + chatId + " has been created!" ) )
-            .catch( ( error ) => console.log( "This chat could not be created!" ) );
+            .catch( ( error ) => console.log( "This chat could not be created!" + error.message ) );
     }
 
     updateChat( chat: ChatModel ) {

@@ -4,44 +4,76 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content class = "ion-text-center" fullscreen = "true">
-    <form #f = "ngForm" (ngSubmit) = "signUp()">
-        <ion-item>
-            <ion-label position = "floating">User Name</ion-label>
-            <ion-input [(ngModel)] = "userName" clearInput =
-                    "true" name = "userName" placeholder = "User Name" required
-                       type = "text">
-            </ion-input>
-            <ion-icon name = "person" slot = "end"></ion-icon>
-        </ion-item>
-        <ion-item>
-            <ion-label position = "floating">Email</ion-label>
-            <ion-input [(ngModel)] = "userEmail" clearInput = "true"
-                       email name = "userEmail" placeholder = "Email" required
-                       type = "email"></ion-input>
-            <ion-icon name = "mail" slot = "end"></ion-icon>
-        </ion-item>
-        <ion-item>
-            <ion-label position = "floating">Password</ion-label>
-            <ion-input [(ngModel)] = "userPassword" clearInput = "true"
-                       minlength = "6"
-                       name = "password" placeholder = "Password"
-                       required type = "password"></ion-input>
-            <ion-icon name = "eye-off" slot = "end"></ion-icon>
-        </ion-item>
-        <ion-item>
-            <ion-label position = "floating">#Phone Number</ion-label>
-            <ion-input [(ngModel)] = "phone" name = "phone"
-                       pattern = "[0-9]{3}[0-9]{3}[0-9]{4}"
-                       placeholder = "1234567890" required
-                       type = "tel">
-            </ion-input>
-            <ion-icon name = "call" slot = "end"></ion-icon>
-        </ion-item>
-        <p style = "color: #3a7be0">Back to <a
-                routerLink = "/login"><b>Login</b></a></p>
-        <ion-button color = "primary" type = "submit">
-            Sign -Up
-        </ion-button>
-    </form>
+<ion-content class = "ion-text-center" fullscreen = "true" padding>
+    <ion-slides [options] = "slideOpts" pager = "true">
+        <ion-slide>
+            <ion-card>
+                <ion-content>
+                    <ion-item>
+                        <ion-avatar slot = "start">
+                            <img [src] = "proPicUrl" alt = "Profile Pic">
+                        </ion-avatar>
+                        <ion-button (click) = "takePhoto()" expand = "block"
+                                    size = "default">
+                            Choose a Profile Picture
+                        </ion-button>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position = "floating">User Name</ion-label>
+                        <ion-input [(ngModel)] = "userName" clearInput =
+                                "true" name = "userName"
+                                   placeholder = "User Name"
+                                   required
+                                   type = "text">
+                        </ion-input>
+                        <ion-icon name = "person" slot = "end"></ion-icon>
+                    </ion-item>
+                </ion-content>
+            </ion-card>
+        </ion-slide>
+        <ion-slide>
+            <ion-card>
+                <ion-content>
+                    <ion-item>
+                        <ion-label position = "floating">Email</ion-label>
+                        <ion-input [(ngModel)] = "userEmail" clearInput = "true"
+                                   email name = "userEmail"
+                                   placeholder = "Email"
+                                   required
+                                   type = "email"></ion-input>
+                        <ion-icon name = "mail" slot = "end"></ion-icon>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position = "floating">Password</ion-label>
+                        <ion-input [(ngModel)] = "userPassword"
+                                   clearInput = "true"
+                                   minlength = "6"
+                                   name = "password" placeholder = "Password"
+                                   required type = "password"></ion-input>
+                        <ion-icon name = "eye-off" slot = "end"></ion-icon>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position = "floating">#Phone Number
+                        </ion-label>
+                        <ion-input [(ngModel)] = "phone" name = "phone"
+                                   pattern = "[0-9]{3}[0-9]{3}[0-9]{4}"
+                                   placeholder = "1234567890" required
+                                   type = "tel">
+                        </ion-input>
+                        <ion-icon name = "call" slot = "end"></ion-icon>
+                    </ion-item>
+
+                    <p style = "color: #3a7be0">Back to <a
+                            routerLink = "/login"><b>Login</b></a></p>
+                    <ion-button (click) = "signUp()" color = "primary"
+                                type = "submit">
+                        Sign -Up
+                    </ion-button>
+                </ion-content>
+            </ion-card>
+        </ion-slide>
+    </ion-slides>
+    <!--    <form #f = "ngForm" (ngSubmit) = "signUp()">-->
+
+    <!--    </form>-->
 </ion-content>

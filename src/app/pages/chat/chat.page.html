@@ -4,7 +4,14 @@
                   slot = "start"
                   style = "margin-left: 5%"></ion-icon>
         <ion-title *ngIf = "user2" style = "color: white">
-            <ion-label>{{user2.userName}}</ion-label>
+            <ion-item color = "primary">
+                <ion-avatar
+                        slot = "start">
+                    <img alt = "Default Pro Pic"
+                         src = "./assets/default-pro-pic.jpg">
+                </ion-avatar>
+                <ion-label>{{user2.userName}}</ion-label>
+            </ion-item>
         </ion-title>
     </ion-toolbar>
 </ion-header>

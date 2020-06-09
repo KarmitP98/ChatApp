@@ -5,6 +5,8 @@ export class User {
         public userEmail: string,
         public userPassword: string,
         public phone: number,
-        public chatIds: { chatId: string, with: string }[]
+        public chatIds: { chatId: string, with: string }[],
+        public proPicUrl?: string,
+        public accountType?: boolean
     ) {}
 }

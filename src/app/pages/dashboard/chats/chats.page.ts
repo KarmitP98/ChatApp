@@ -7,6 +7,8 @@ import { leftLoadTrigger, opacityTrigger, TEXT_STATUS } from "../../../shared/sh
 import { untilDestroyed } from "@orchestrator/ngx-until-destroyed";
 import { Router } from "@angular/router";
 import { TextModel } from "../../../shared/text.model";
+import { MessagingService } from "../../../messaging.service";
+import { BehaviorSubject } from "rxjs";
 
 @Component( {
                 selector: "app-chats",
@@ -20,10 +22,12 @@ export class ChatsPage implements OnInit, OnDestroy {
 
 
     nums;
+    message: BehaviorSubject<null>;
 
-    constructor( private us: UserService, private afs: AngularFirestore, private router: Router ) { }
+    constructor( private us: UserService, private afs: AngularFirestore, private router: Router, private ms: MessagingService ) { }
 
     ngOnInit() {
+
 
         this.us.userSubject.pipe( untilDestroyed( this ) ).subscribe( user => {
             if ( user ) {

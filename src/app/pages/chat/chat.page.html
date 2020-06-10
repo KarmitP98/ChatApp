@@ -1,22 +1,18 @@
 <ion-header>
     <ion-toolbar color = "primary">
-        <ion-icon (click) = "goBack()" name = "arrow-back"
-                  slot = "start"
-                  style = "margin-left: 5%"></ion-icon>
-        <ion-title *ngIf = "user2" style = "color: white">
-            <ion-item color = "primary">
-                <ion-avatar
-                        slot = "start">
-                    <img alt = "Default Pro Pic"
-                         src = "./assets/default-pro-pic.jpg">
-                </ion-avatar>
-                <ion-label>{{user2.userName}}</ion-label>
-            </ion-item>
-        </ion-title>
+        <ion-item button color = "primary" lines = "none">
+            <ion-icon (click) = "goBack()" name = "arrow-back" slot = "start">
+            </ion-icon>
+            <ion-avatar *ngIf = "user2" slot = "start">
+                <ion-img [src] = "user2.proPicUrl"></ion-img>
+            </ion-avatar>
+            <ion-label (click) = "scrollToBottom()"
+                       *ngIf = "user2">{{user2.userName}}</ion-label>
+        </ion-item>
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [scrollEvents] = "true" slot = "fixed">
     <div *ngIf = "messages.length === 0">
         <ion-card>
             <ion-card-content>No messages yet!</ion-card-content>
@@ -29,8 +25,10 @@
                       style = "width: 100%;">
                 <ion-avatar
                         [slot] = "message.from === user.userName ? 'end': 'start'">
-                    <img alt = "Default Pro Pic"
-                         src = "./assets/default-pro-pic.jpg">
+                    <ion-img *ngIf = "user && user2" [src] = "message.from ===
+                    user.userName ?
+                    user.proPicUrl: user2.proPicUrl">
+                    </ion-img>
                 </ion-avatar>
                 <ion-label [ngClass] = "message.from === user.userName ?
                     'yellow-background' : 'blue-background'">
@@ -51,7 +49,8 @@
                         <ion-icon *ngIf = "message.status === 'Received' ||
                                   message.status === 'Read' &&
                               message.from === user.userName"
-                                  [color] = "message.status === 'Read' ?
+                                  [color] = "message.status === 'Read' &&
+                                  !user2.ghostMode && user2 ?
                                   'primary' : ''"
                                   name = "checkmark-done-outline">
                         </ion-icon>
@@ -60,6 +59,16 @@
             </ion-item>
         </ion-list>
     </div>
+
+    <ion-fab horizontal = "end" slot = "fixed"
+             vertical = "bottom">
+        <ion-fab-button color = "warning" style = "width: 30px;
+        height: 30px; opacity: 70%;">
+            <ion-icon (click) = "content.scrollToBottom(500)"
+                      name = "chevron-down"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+
 </ion-content>
 
 <ion-footer>
@@ -67,8 +76,8 @@
         <ion-item>
             <ion-input (keydown.enter) = "sentText()" [(ngModel)] = "text"
                        color = "primary" name = "text"
-                       placeholder = "Enter a text"
-                       style = "border-radius: 10px"></ion-input>
+                       placeholder = "Enter a text">
+            </ion-input>
             <ion-icon (click) = "sentText()" color = "primary"
                       name = "paper-plane"
                       slot = "end"></ion-icon>

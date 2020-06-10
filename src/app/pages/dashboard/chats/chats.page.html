@@ -1,41 +1,31 @@
 <ion-header>
     <ion-toolbar color = "primary">
         <ion-title color = "primary" style = "color: white">Chats</ion-title>
+        <ion-buttons slot = "end">
+            <ion-button (click) = "presentPopover($event)">
+                <ion-icon name = "ellipsis-vertical"></ion-icon>
+            </ion-button>
+        </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
-    <ion-fab edge horizontal = "end" slot = "fixed" vertical = "top">
-        <ion-fab-button color = "light">
-            <ion-icon color = "primary" name = "ellipsis-vertical"></ion-icon>
-        </ion-fab-button>
-        <ion-fab-list>
-            <ion-fab-button color = "primary" routerLink = "/dashboard/users">
-                <ion-icon name = "file-tray-stacked"></ion-icon>
-            </ion-fab-button>
-            <ion-fab-button color = "primary" routerLink = "/dashboard/profile">
-                <ion-icon name = "finger-print"></ion-icon>
-            </ion-fab-button>
-            <ion-fab-button color = "primary">
-                <ion-icon name = "add"></ion-icon>
-            </ion-fab-button>
-        </ion-fab-list>
-    </ion-fab>
-
     <div *ngIf = "chats.length > 0" [@slideLeft]>
         <ion-list>
             <ion-item-sliding *ngFor = "let chat of chats">
-                <ion-item (click) = "startChat(chat)" lines = "full">
+                <ion-item (click) = "startChat(chat)" button lines = "full">
                     <ion-avatar slot = "start">
-                        <img src = "./assets/default-pro-pic.jpg">
+                        <ion-img [src] = "chat.otherAvatar"></ion-img>
                     </ion-avatar>
                     <ion-label>
                         <h2>{{chat.otherUser}}</h2>
                         <h3>{{chat.lastMessage.content | shorten }}</h3>
-                        <ion-badge *ngIf = "chat.unread > 0"
-                                   color = "warning">{{chat.unread}}</ion-badge>
                     </ion-label>
+                    <ion-avatar slot = "end">
+                        <ion-badge *ngIf = "chat.unread > 0"
+                                   color = "warning">{{chat.unread}}
+                        </ion-badge>
+                    </ion-avatar>
                 </ion-item>
                 <ion-item-options side = "end">
                     <ion-item-option (click) = "delete(chat)"
@@ -49,17 +39,17 @@
         </ion-list>
     </div>
 
-    <div *ngIf = "chats.length === 0" [@opacityUp]>
-        <div class = "container" style = "height: 100%; margin-top: auto;
-        margin-bottom: auto;">
-            <ion-card>
-                <ion-card-content color = "primary">
-                    Try being a human...<br>
-                    <b routerLink = "/dashboard/users">Talk
-                                                       to people!</b>
-                </ion-card-content>
-            </ion-card>
-        </div>
-    </div>
+    <!--    <div *ngIf = "chats.length === 0" [@opacityUp]>-->
+    <!--        <div class = "container" style = "height: 100%; margin-top: auto;-->
+    <!--        margin-bottom: auto;">-->
+    <!--            <ion-card>-->
+    <!--                <ion-card-content color = "primary">-->
+    <!--                    Try being a human...<br>-->
+    <!--                    <b routerLink = "/dashboard/users">Talk-->
+    <!--                                                       to people!</b>-->
+    <!--                </ion-card-content>-->
+    <!--            </ion-card>-->
+    <!--        </div>-->
+    <!--    </div>-->
 
 </ion-content>

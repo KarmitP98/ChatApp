@@ -6,7 +6,8 @@ export class User {
         public userPassword: string,
         public phone: number,
         public chatIds: { chatId: string, with: string }[],
-        public proPicUrl?: string,
-        public accountType?: boolean
+        public proPicUrl: string,
+        public accountType: boolean,
+        public ghostMode: boolean
     ) {}
 }

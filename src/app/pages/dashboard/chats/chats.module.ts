@@ -8,6 +8,7 @@ import { ChatsPageRoutingModule } from "./chats-routing.module";
 
 import { ChatsPage } from "./chats.page";
 import { ShortenPipe } from "../../../shared/shorten.pipe";
+import { ChatsOptions } from "./chat-options/chat-options.component";
 
 @NgModule( {
                imports: [
@@ -17,6 +18,7 @@ import { ShortenPipe } from "../../../shared/shorten.pipe";
                    ChatsPageRoutingModule
                ],
                declarations: [ ChatsPage,
-                               ShortenPipe ]
+                               ShortenPipe,
+                               ChatsOptions ]
            } )
 export class ChatsPageModule {}

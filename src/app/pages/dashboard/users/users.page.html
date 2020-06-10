@@ -4,8 +4,8 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen = "true">
-    <div *ngIf = "users.length > 0" [@slideLeft]>
+<ion-content>
+    <div *ngIf = "users.length > 0" [@opacityUp]>
         <ion-searchbar animated></ion-searchbar>
         <ion-list>
             <ion-list-header>Contacts</ion-list-header>
@@ -13,7 +13,7 @@
                       *ngFor = "let user of users;let i = index;"
                       lines = "full">
                 <ion-avatar slot = "end">
-                    <img src = "./assets/default-pro-pic.jpg">
+                    <ion-img [src] = "user.proPicUrl"></ion-img>
                 </ion-avatar>
                 <ion-label>
                     <h2>{{user.userName}}</h2>
@@ -23,9 +23,9 @@
             </ion-item>
         </ion-list>
     </div>
-    <div *ngIf = "users.length === 0" [@opacityUp]>
-        <ion-card>
-            <ion-card-content>You have no contacts!</ion-card-content>
-        </ion-card>
-    </div>
+    <!--    <div *ngIf = "users.length === 0" [@opacityUp]>-->
+    <!--        <ion-card>-->
+    <!--            <ion-card-content>You have no contacts!</ion-card-content>-->
+    <!--        </ion-card>-->
+    <!--    </div>-->
 </ion-content>

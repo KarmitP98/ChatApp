@@ -1,13 +1,13 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { ProfilePage } from "./profile.page";
+import { SettingsPage } from "./settings.page";
 import { AuthService } from "../../../shared/auth.service";
 
 const routes: Routes = [
     {
         path: "",
-        component: ProfilePage, canActivate: [ AuthService ]
+        component: SettingsPage, canActivate: [ AuthService ]
     }
 ];
 

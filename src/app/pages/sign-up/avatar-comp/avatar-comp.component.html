@@ -1,0 +1,45 @@
+<ion-header>
+    <ion-toolbar color = "primary">
+        <ion-title>Choose an Avatar</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-grid>
+        <ion-row>
+            <ion-col *ngFor = "let item of avatars.slice(0,3)">
+                <ion-avatar [style] = "selectedAvatar === item ?
+                    'border: green 2px solid': ''">
+                    <ion-img (click) = "select(item)"
+                             [src] = "item"></ion-img>
+                </ion-avatar>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col *ngFor = "let item of avatars.slice(3,6)">
+                <ion-avatar [style] = "selectedAvatar === item ?
+                    'border: green 2px solid': ''">
+                    <ion-img (click) = "select(item)"
+                             [src] = "item"></ion-img>
+                </ion-avatar>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col *ngFor = "let item of avatars.slice(6,9)">
+                <ion-avatar [style] = "selectedAvatar === item ?
+                    'border: green 2px solid': ''">
+                    <ion-img (click) = "select(item)"
+                             [src] = "item"></ion-img>
+                </ion-avatar>
+            </ion-col>
+        </ion-row>
+
+    </ion-grid>
+    <ion-fab horizontal = "end" vertical = "bottom">
+        <ion-fab-button (click) = "dismiss()" color = "success">
+            <ion-icon name = "checkmark"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+</ion-content>

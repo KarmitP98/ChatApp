@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { User } from "../../shared/user.model";
 import { UserService } from "../../shared/user.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AngularFireDatabase } from "@angular/fire/database";
-import { ToastController } from "@ionic/angular";
+import { IonContent, ToastController } from "@ionic/angular";
 import { ChatModel } from "../../shared/chat.model";
 import { untilDestroyed } from "@orchestrator/ngx-until-destroyed";
 import { TextModel } from "../../shared/text.model";
@@ -22,6 +22,8 @@ export class ChatPage implements OnInit, OnDestroy {
     text: string;
     chat: ChatModel;
     messages: TextModel[] = [];
+    @ViewChild( IonContent ) content: IonContent;
+    bottom: any;
 
     constructor( private router: Router, private us: UserService, private route: ActivatedRoute, private store: AngularFireDatabase,
                  private toastController: ToastController ) { }
@@ -59,6 +61,7 @@ export class ChatPage implements OnInit, OnDestroy {
                 }
             } );
 
+        setTimeout( () => {this.content.scrollToBottom( 500 );}, 500 );
 
     }
 
@@ -97,6 +100,17 @@ export class ChatPage implements OnInit, OnDestroy {
             this.chat.lastMessage = this.text;
             this.us.updateChat( this.chat );
             this.text = "";
+            this.content.scrollToBottom();
         }
+    }
+
+    scrolled( $event: any ): void {
+        console.log( "Scrolled!" );
+        console.log( $event );
+    }
+
+    scrollToBottom(): void {
+        this.content.scrollToBottom()
+            .then( () => console.log( "Messages have been loaded!" ) );
     }
 }

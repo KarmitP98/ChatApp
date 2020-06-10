@@ -5,6 +5,9 @@ import { NgForm } from "@angular/forms";
 import { MessagingService } from "../../messaging.service";
 import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
 import { storage } from "firebase";
+import { IonSlides, ModalController } from "@ionic/angular";
+import { AvatarComp } from "./avatar-comp/avatar-comp.component";
+import { Router } from "@angular/router";
 
 @Component( {
                 selector: "app-sign-up",
@@ -17,29 +20,27 @@ export class SignUpPage implements OnInit {
     userEmail: string;
     @ViewChild( "f", { static: false } ) form: NgForm;
     phone: number;
-    proPicUrl: string;
+    proPicUrl: string = "/assets/Avatars/Av1.jpg";
+    @ViewChild( IonSlides ) slides: IonSlides;
 
     slideOpts = {
-        initialSlide: 1
+        initialSlide: 0
     };
 
-    constructor( private us: UserService, private ms: MessagingService, private camera: Camera, private ref: ChangeDetectorRef ) { }
+    constructor( private us: UserService,
+                 private ms: MessagingService,
+                 private camera: Camera,
+                 private ref: ChangeDetectorRef,
+                 private modalController: ModalController,
+                 private router: Router ) { }
 
     ngOnInit() {
-        storage().ref( "ProfilePictures" ).child( "default-pro-pic.jpg" )
-                 .getDownloadURL()
-                 .then( value => {
-                     this.proPicUrl = value.toString();
-                 } )
-                 .catch( error => {console.log( "Default Profile Picture not found!" );} );
     }
 
     signUp(): void {
-
-
         this.us.signUp( this.userEmail, this.userPassword,
-                        new User( "", this.userName, this.userEmail, this.userPassword, this.phone, [] ) );
-        this.form.resetForm();
+                        new User( "", this.userName, this.userEmail, this.userPassword, this.phone, [], this.proPicUrl, true, false ) );
+        // this.form.resetForm();
     }
 
     async takePhoto() {
@@ -65,5 +66,33 @@ export class SignUpPage implements OnInit {
         } catch ( e ) {
             console.error( e );
         }
+    }
+
+    async presentModal() {
+        const modal = await this.modalController.create(
+            {
+                component: AvatarComp,
+                swipeToClose: true,
+                componentProps: [ {
+                    selectedAvatar: this.proPicUrl
+                } ]
+            } );
+        await modal.present();
+
+        const { data } = await modal.onWillDismiss();
+        this.proPicUrl = data.selected;
+    }
+
+    backToLogin(): void {
+        this.userName = null;
+        this.userEmail = null;
+        this.userPassword = null;
+        this.router.navigate( [ "/login" ] )
+            .then( () => console.log( "Back to login!" ) );
+    }
+
+    goToPage( page ) {
+        this.slides.slideTo( page )
+            .then( () => console.log( "Slide to page " + page ) );
     }
 }

@@ -98,7 +98,7 @@ export class UserService {
         this.fireAuth.signOut().then( value => {
             this.userSubject.next( null );  // Clear current subject
             localStorage.removeItem( "userData" );  // Clear local storage
-            this.router.navigate( [ "/login" ] ).then( () => console.log( "User has been logged in!" ) );
+            this.router.navigate( [ "/login" ] ).then( () => console.log( "User has been logged out!" ) );
         } ).catch();
 
     }
@@ -146,7 +146,10 @@ export class UserService {
         this.userRef
             .doc( user.userId )
             .update( user )
-            .then( () => console.log( user.userEmail + " has been updated!" ) );
+            .then( () => {
+                console.log( user.userEmail + " has been updated!" );
+                this.userSubject.next( user );
+            } );
     }
 
 

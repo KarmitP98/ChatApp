@@ -77,7 +77,7 @@ export class UserService {
             .then( () => {
                 let sub = this.fetchUsers( "userEmail", email ).subscribe( ( value: User[] ) => {
                     this.userSubject.next( value[0] );
-                    localStorage.setItem( "userData", JSON.stringify( value[0].userEmail ) );
+                    localStorage.setItem( "userData", JSON.stringify( value[0].userId ) );
                     this.router.navigate( [ "/dashboard" ] )
                         .then( () => console.log( value[0].userName + " has logged in!" ) );
                     sub.unsubscribe();
@@ -132,7 +132,7 @@ export class UserService {
             .then( () => {
                 console.log( "User has been added" );
                 this.userSubject.next( user );
-                localStorage.setItem( "userData", JSON.stringify( user.userEmail ) );
+                localStorage.setItem( "userData", JSON.stringify( user.userId ) );
                 this.router.navigate( [ "/dashboard" ] ).then( () => console.log( "New User has signed up!" ) );
             } )
             .catch(
@@ -147,8 +147,10 @@ export class UserService {
             .doc( user.userId )
             .update( user )
             .then( () => {
-                console.log( user.userEmail + " has been updated!" );
-                this.userSubject.next( user );
+                console.log( user.userName + " has been updated!" );
+                if ( JSON.parse( localStorage.getItem( "userData" ) ) === user.userId ) {
+                    this.userSubject.next( user );
+                }
             } );
     }
 

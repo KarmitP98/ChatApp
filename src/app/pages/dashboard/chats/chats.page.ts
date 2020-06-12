@@ -42,21 +42,21 @@ export class ChatsPage implements OnInit, OnDestroy {
     }
 
     async fetchChats() {
-        this.afs.collection( "chats", ref => ref.where( "between", "array-contains-any", [ this.user.userName ] ) )
+        this.afs.collection( "chats", ref => ref.where( "between", "array-contains-any", [ this.user.userId ] ) )
             .valueChanges()
             .subscribe( ( chats: ChatModel[] ) => {
                 if ( chats.length > 0 && this.user ) {
                     this.chats = [];
                     chats.forEach( chat => {
                         const unread = chat.messages.filter(
-                            message => message.status !== TEXT_STATUS.read && message.to === this.user.userName ).length;
+                            message => message.status !== TEXT_STATUS.read && message.to === this.user.userId ).length;
 
-                        const otherName = chat.between.filter( value2 => value2 !== this.user.userName )[0];
+                        const otherId = chat.between.filter( value2 => value2 !== this.user.userId )[0];
 
-                        this.us.fetchUsers( "userName", otherName ).pipe( take( 1 ), untilDestroyed( this ) ).subscribe( usr => {
+                        this.us.fetchUsers( "userId", otherId ).pipe( take( 1 ), untilDestroyed( this ) ).subscribe( usr => {
                             this.chats.push( {
                                                  lastMessage: chat.messages[chat.messages.length - 1],
-                                                 otherUser: chat.between.filter( value2 => value2 !== this.user.userName )[0],
+                                                 otherUser: usr[0].userName,
                                                  chatId: chat.chatId,
                                                  unread: unread,
                                                  otherAvatar: usr[0].proPicUrl
@@ -74,7 +74,7 @@ export class ChatsPage implements OnInit, OnDestroy {
 
     startChat( chat: { lastMessage: TextModel; otherUser: string; chatId: string } ): void {
         this.router.navigate( [ "chat", chat.chatId ] )
-            .then( () => console.log( this.user.userName + " and " + chat.otherUser + " resumed Chatting!" ) )
+            .then( () => console.log( this.user.userId + " and " + chat.otherUser + " resumed Chatting!" ) )
             .catch( () => console.log( "Chat cannot be opened!" ) );
     }
 

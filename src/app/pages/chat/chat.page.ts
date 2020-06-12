@@ -22,7 +22,7 @@ export class ChatPage implements OnInit, OnDestroy {
     text: string;
     chat: ChatModel;
     messages: TextModel[] = [];
-    @ViewChild( IonContent ) content: IonContent;
+    @ViewChild( "content" ) content: IonContent;
     bottom: any;
 
     constructor( private router: Router, private us: UserService, private route: ActivatedRoute, private store: AngularFireDatabase,
@@ -34,6 +34,8 @@ export class ChatPage implements OnInit, OnDestroy {
             .pipe( untilDestroyed( this ) )
             .subscribe( value => {
                 this.user = value;
+                console.log( "User 1: " );
+                console.log( this.user );
             } );
 
         this.chatId = this.route.snapshot.params["id"];
@@ -44,16 +46,18 @@ export class ChatPage implements OnInit, OnDestroy {
             .pipe( untilDestroyed( this ) )
             .subscribe( value => {
                 this.user2 = value[0];
+                console.log( "User 2:" );
+                console.log( this.user2 );
             } );
 
         this.us.fetchChats( "chatId", this.chatId )
             .pipe( untilDestroyed( this ) )
             .subscribe( ( value ) => {
-                if ( value.length > 0 ) {
+                if ( value.length > 0 && this.user && this.user2 ) {
                     this.chat = value[0];
                     this.messages = this.chat.messages;
                     for ( let message of this.chat.messages ) {
-                        if ( message.to === this.user.userName ) {
+                        if ( message.to === this.user.userId ) {
                             message.status = TEXT_STATUS.read;
                         }
                     }
@@ -90,11 +94,13 @@ export class ChatPage implements OnInit, OnDestroy {
                 chatId: this.chatId,
                 textId: "Random",
                 content: this.text,
-                to: this.user2.userName,
-                from: this.user.userName,
+                to: this.user2.userId,
+                from: this.user.userId,
                 status: TEXT_STATUS.sent,
                 timeStamp: new Date()
             };
+
+            console.log( text );
 
             this.chat.messages.push( text );
             this.chat.lastMessage = this.text;

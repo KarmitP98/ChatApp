@@ -57,32 +57,34 @@ export class UsersPage implements OnInit, OnDestroy {
                     handler: () => {
                         this.startChat( user );
                     }
-                }, {
-                    text: "Call",
-                    icon: "call",
-                    handler: () => {
-                        console.log( "Call clicked" );
-                    }
-                }, {
-                    text: "Video Call",
-                    icon: "videocam",
-                    handler: () => {
-                        console.log( "Video Call clicked" );
-                    }
-                }, {
-                    text: "Share",
-                    icon: "share-social",
-                    handler: () => {
-                        console.log( "Share clicked" );
-                    }
-                }, {
-                    text: "Cancel",
-                    icon: "close",
-                    role: "cancel",
-                    handler: () => {
-                        console.log( "Cancel clicked" );
-                    }
-                } ]
+                }
+                    // , {
+                    //     text: "Call",
+                    //     icon: "call",
+                    //     handler: () => {
+                    //         console.log( "Call clicked" );
+                    //     }
+                    // }, {
+                    //     text: "Video Call",
+                    //     icon: "videocam",
+                    //     handler: () => {
+                    //         console.log( "Video Call clicked" );
+                    //     }
+                    // }, {
+                    //     text: "Share",
+                    //     icon: "share-social",
+                    //     handler: () => {
+                    //         console.log( "Share clicked" );
+                    //     }
+                    // },
+                    , {
+                        text: "Cancel",
+                        icon: "close",
+                        role: "cancel",
+                        handler: () => {
+                            console.log( "Cancel clicked" );
+                        }
+                    } ]
             } );
         await actionSheet.present();
     }
@@ -90,10 +92,10 @@ export class UsersPage implements OnInit, OnDestroy {
     startChat( other: User ) {
         console.log( "Chat pressed!" );
 
-        const hasChatted = this.user.chatIds.some( value => value.with === other.userEmail );
+        const hasChatted = this.user.chatIds.some( value => value.with === other.userId );
         if ( hasChatted ) {
             for ( let id of this.user.chatIds ) {
-                if ( id.with === other.userEmail ) {
+                if ( id.with === other.userId ) {
                     console.log( id.chatId );
                     this.router.navigate( [ "chat", id.chatId ] )
                         .then( () => console.log( this.user.userName + " continued chatting with " + other.userName ) );
@@ -102,14 +104,14 @@ export class UsersPage implements OnInit, OnDestroy {
         } else {
             const chat: ChatModel = {
                 chatId: this.user.userId + "-" + other.userId,
-                between: [ this.user.userName, other.userName ],
+                between: [ this.user.userId, other.userId ],
                 lastMessage: "",
                 messages: []
             };
             this.us.createNewChat( chat );
 
-            this.user.chatIds.push( { chatId: chat.chatId, with: other.userName } );
-            other.chatIds.push( { chatId: chat.chatId, with: this.user.userName } );
+            this.user.chatIds.push( { chatId: chat.chatId, with: other.userId } );
+            other.chatIds.push( { chatId: chat.chatId, with: this.user.userId } );
 
             this.us.updateUser( this.user );
             this.us.updateUser( other );

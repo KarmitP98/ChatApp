@@ -12,7 +12,7 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content [scrollEvents] = "true" slot = "fixed">
+<ion-content #content [scrollEvents] = "true" slot = "fixed">
     <div *ngIf = "messages.length === 0">
         <ion-card>
             <ion-card-content>No messages yet!</ion-card-content>
@@ -20,21 +20,21 @@
     </div>
     <div *ngIf = "messages.length > 0">
         <ion-list lines = "none">
-            <ion-item *ngFor = "let message of messages"
-                      slot = "start"
+            <ion-item *ngFor = "let message of messages" slot = "start"
                       style = "width: 100%;">
                 <ion-avatar
-                        [slot] = "message.from === user.userName ? 'end': 'start'">
+                        [slot] = "message.from === user.userId ? 'end': 'start'">
                     <ion-img *ngIf = "user && user2" [src] = "message.from ===
-                    user.userName ?
+                    user.userId ?
                     user.proPicUrl: user2.proPicUrl">
                     </ion-img>
                 </ion-avatar>
-                <ion-label [ngClass] = "message.from === user.userName ?
+                <ion-label [ngClass] = "message.from === user.userId ?
                     'yellow-background' : 'blue-background'">
                     <h5>
                         <b>
-                            {{message.from}}
+                            {{message.from === user.userId ? user.userName :
+                            user2.userName}}
                         </b>
                     </h5>
                     <p>
@@ -43,12 +43,12 @@
                     </p>
                     <div style = "width: 100%; text-align: right">
                         <ion-icon *ngIf = "message.status === 'Sent' &&
-                              message.from === user.userName"
+                              message.from === user.userId"
                                   name = "checkmark-outline">
                         </ion-icon>
                         <ion-icon *ngIf = "message.status === 'Received' ||
                                   message.status === 'Read' &&
-                              message.from === user.userName"
+                              message.from === user.userId"
                                   [color] = "message.status === 'Read' &&
                                   !user2.ghostMode && user2 ?
                                   'primary' : ''"
@@ -62,7 +62,8 @@
 
     <ion-fab horizontal = "end" slot = "fixed"
              vertical = "bottom">
-        <ion-fab-button color = "warning" style = "width: 30px;
+        <ion-fab-button *ngIf = "content.ionScroll &&
+        !(content.ionScrollEnd)" color = "warning" style = "width: 30px;
         height: 30px; opacity: 70%;">
             <ion-icon (click) = "content.scrollToBottom(500)"
                       name = "chevron-down"></ion-icon>

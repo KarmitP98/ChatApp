@@ -11,7 +11,7 @@
             <ion-list-header>Contacts</ion-list-header>
             <ion-item (click) = "presentActionSheet(user)"
                       *ngFor = "let user of users;let i = index;"
-                      lines = "full">
+                      button lines = "full">
                 <ion-avatar slot = "end">
                     <ion-img [src] = "user.proPicUrl"></ion-img>
                 </ion-avatar>

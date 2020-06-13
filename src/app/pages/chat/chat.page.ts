@@ -2,12 +2,12 @@ import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { User } from "../../shared/user.model";
 import { UserService } from "../../shared/user.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AngularFireDatabase } from "@angular/fire/database";
-import { IonContent, ToastController } from "@ionic/angular";
+import { IonContent } from "@ionic/angular";
 import { ChatModel } from "../../shared/chat.model";
 import { untilDestroyed } from "@orchestrator/ngx-until-destroyed";
 import { TextModel } from "../../shared/text.model";
 import { TEXT_STATUS } from "../../shared/shared";
+import { MessagingService } from "../../messaging.service";
 
 @Component( {
                 selector: "app-chat",
@@ -25,8 +25,7 @@ export class ChatPage implements OnInit, OnDestroy {
     @ViewChild( "content" ) content: IonContent;
     bottom: any;
 
-    constructor( private router: Router, private us: UserService, private route: ActivatedRoute, private store: AngularFireDatabase,
-                 private toastController: ToastController ) { }
+    constructor( private router: Router, private us: UserService, private route: ActivatedRoute, private ms: MessagingService ) { }
 
     ngOnInit() {
 
@@ -34,8 +33,6 @@ export class ChatPage implements OnInit, OnDestroy {
             .pipe( untilDestroyed( this ) )
             .subscribe( value => {
                 this.user = value;
-                console.log( "User 1: " );
-                console.log( this.user );
             } );
 
         this.chatId = this.route.snapshot.params["id"];
@@ -46,8 +43,6 @@ export class ChatPage implements OnInit, OnDestroy {
             .pipe( untilDestroyed( this ) )
             .subscribe( value => {
                 this.user2 = value[0];
-                console.log( "User 2:" );
-                console.log( this.user2 );
             } );
 
         this.us.fetchChats( "chatId", this.chatId )
@@ -101,12 +96,17 @@ export class ChatPage implements OnInit, OnDestroy {
                 timeStamp: new Date()
             };
 
-            console.log( text );
-
             this.chat.messages.push( text );
-            this.chat.lastMessage = this.text;
+            this.chat.lastMessage = this.user.userName + ": " + this.text;
             this.us.updateChat( this.chat );
             this.text = "";
+
+            this.ms.sendMessage( this.user, this.user2, text )
+                .pipe( untilDestroyed( this ) )
+                .subscribe( mId => {
+                    console.log( mId );
+                } );
+
             this.content.scrollToBottom();
         }
     }

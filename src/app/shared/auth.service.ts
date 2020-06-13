@@ -14,13 +14,13 @@ export class AuthService implements CanActivate {
         if ( this.us.userSubject.getValue() ) {
             return true;
         } else {
-            const email = JSON.parse( localStorage.getItem( "userData" ) );
-            if ( email ) {
-                this.us.autoLogin( email );
-                return true;
-            } else {
-                return this.router.navigate( [ "/login" ] );
-            }
+            // const email = JSON.parse( localStorage.getItem( "userData" ) );
+            // if ( email ) {
+            //     this.us.autoLogin( email );
+            //     return true;
+            // } else {
+            return this.router.navigate( [ "/login" ] );
+            // }
         }
     }
 

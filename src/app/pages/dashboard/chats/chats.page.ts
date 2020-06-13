@@ -6,7 +6,6 @@ import { AngularFirestore } from "@angular/fire/firestore";
 import { leftLoadTrigger, opacityTrigger, TEXT_STATUS } from "../../../shared/shared";
 import { untilDestroyed } from "@orchestrator/ngx-until-destroyed";
 import { Router } from "@angular/router";
-import { TextModel } from "../../../shared/text.model";
 import { MessagingService } from "../../../messaging.service";
 import { BehaviorSubject } from "rxjs";
 import { take } from "rxjs/operators";
@@ -21,7 +20,7 @@ import { ChatsOptions } from "./chat-options/chat-options.component";
             } )
 export class ChatsPage implements OnInit, OnDestroy {
     user: User;
-    chats: { lastMessage: TextModel, otherUser: string, chatId: string, unread: number, otherAvatar: string }[] = [];
+    chats: { lastMessage: string, otherUser: string, chatId: string, unread: number, otherAvatar: string }[] = [];
     users: string[] = [];
     message: BehaviorSubject<null>;
 
@@ -44,9 +43,11 @@ export class ChatsPage implements OnInit, OnDestroy {
     async fetchChats() {
         this.afs.collection( "chats", ref => ref.where( "between", "array-contains-any", [ this.user.userId ] ) )
             .valueChanges()
+            .pipe( untilDestroyed( this ) )
             .subscribe( ( chats: ChatModel[] ) => {
                 if ( chats.length > 0 && this.user ) {
                     this.chats = [];
+                    console.log( chats );
                     chats.forEach( chat => {
                         const unread = chat.messages.filter(
                             message => message.status !== TEXT_STATUS.read && message.to === this.user.userId ).length;
@@ -55,7 +56,7 @@ export class ChatsPage implements OnInit, OnDestroy {
 
                         this.us.fetchUsers( "userId", otherId ).pipe( take( 1 ), untilDestroyed( this ) ).subscribe( usr => {
                             this.chats.push( {
-                                                 lastMessage: chat.messages[chat.messages.length - 1],
+                                                 lastMessage: chat.lastMessage,
                                                  otherUser: usr[0].userName,
                                                  chatId: chat.chatId,
                                                  unread: unread,
@@ -72,13 +73,13 @@ export class ChatsPage implements OnInit, OnDestroy {
     ngOnDestroy(): void {
     }
 
-    startChat( chat: { lastMessage: TextModel; otherUser: string; chatId: string } ): void {
+    startChat( chat: { lastMessage: string; otherUser: string; chatId: string } ): void {
         this.router.navigate( [ "chat", chat.chatId ] )
             .then( () => console.log( this.user.userId + " and " + chat.otherUser + " resumed Chatting!" ) )
             .catch( () => console.log( "Chat cannot be opened!" ) );
     }
 
-    delete( chat: { lastMessage: TextModel; otherUser: string; chatId: string } ): void {
+    delete( chat: { lastMessage: string; otherUser: string; chatId: string } ): void {
 
         console.log( "Chat delete!" );
     }

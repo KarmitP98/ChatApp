@@ -14,11 +14,13 @@
         <ion-item>
             <ion-label>Private Account</ion-label>
             <ion-toggle [(ngModel)] = "accountType"
+                        (click) = "changeAccountType()"
                         color = "warning"></ion-toggle>
         </ion-item>
         <ion-item>
             <ion-label>Notifications</ion-label>
-            <ion-toggle (click) = "requestPermission()" [(ngModel)] = "notify"
+            <ion-toggle (click) = "requestPermission()"
+                        [(ngModel)] = "notify"
                         color = "success"></ion-toggle>
         </ion-item>
     </ion-list>

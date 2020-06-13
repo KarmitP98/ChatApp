@@ -4,7 +4,8 @@ import { AngularFireFunctions } from "@angular/fire/functions";
 import { ToastController } from "@ionic/angular";
 import { tap } from "rxjs/operators";
 import { AngularFirestore } from "@angular/fire/firestore";
-import { untilDestroyed } from "@orchestrator/ngx-until-destroyed";
+import { TextModel } from "./shared/text.model";
+import { User } from "./shared/user.model";
 
 
 @Injectable()
@@ -33,43 +34,23 @@ export class MessagingService implements OnDestroy {
         await toast.present();
     }
 
+    // Returns an observable that contains the token
     getPermission() {
-
-        this.revokePermission();
-
-        this.afm.requestToken.pipe(
-            tap( token => {
-                this.token = token;
-                console.log( this.token );
-            } )
-        ).subscribe( value => {console.log( value );} );
+        return this.afm.requestToken;
     }
 
+    // Return the token that will be used to remove the token string from the string
     revokePermission() {
-        this.afm.getToken
-            .pipe( untilDestroyed( this ) )
-            .subscribe( token => {
-                this.afm.deleteToken( token );
-            } );
+        return this.afm.getToken;
     }
 
     showMessages() {
-
-        // this.afm.messages.pipe(
-        //     tap( msg => {
-        //         const body: any = (msg as any).notification.body;
-        //         this.makeToast( body );
-        //     } )
-        // ).subscribe(value => {
-        //     const body: any = (value as any).notification.body;
-        //     this.makeToast( body );
-        // });
-
         this.afm.messages.subscribe( msg => {
             const body: any = (msg as any).notification.body;
             console.log( "msg" );
         } );
     }
+
 
     subs( topic ) {
         this.fun.httpsCallable( "subscribeToTopic" )(
@@ -85,12 +66,20 @@ export class MessagingService implements OnDestroy {
             .subscribe();
     }
 
-    sendMessage() {
+
+    testMessage() {
         const random = Math.round( Math.random() * 100 );
         const headline = "New Test: " + random + "!!!";
 
         this.afs.collection( "test" ).add( { headline: headline } )
             .then( () => {console.log( "New Random Added!" );} );
         this.showMessages();
+    }
+
+    sendMessage( user: User, user2: User, text: TextModel ) {
+        return this.fun.httpsCallable( "notifyUser" )
+        ( { user: user, user2: user2, message: text } )
+                   .pipe( tap( tap => this.makeToast( tap ) ) );
+
     }
 }

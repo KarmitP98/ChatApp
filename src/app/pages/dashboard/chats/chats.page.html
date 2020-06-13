@@ -19,7 +19,7 @@
                     </ion-avatar>
                     <ion-label>
                         <h2>{{chat.otherUser}}</h2>
-                        <h3>{{chat.lastMessage.content | shorten }}</h3>
+                        <h3>{{chat.lastMessage | shorten }}</h3>
                     </ion-label>
                     <ion-avatar slot = "end">
                         <ion-badge *ngIf = "chat.unread > 0"

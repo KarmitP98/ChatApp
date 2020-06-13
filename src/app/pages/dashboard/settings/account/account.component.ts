@@ -3,6 +3,7 @@ import { untilDestroyed } from "@orchestrator/ngx-until-destroyed";
 import { UserService } from "../../../../shared/user.service";
 import { ModalController } from "@ionic/angular";
 import { User } from "../../../../shared/user.model";
+import { MessagingService } from "../../../../messaging.service";
 
 @Component( {
                 selector: "app-account",
@@ -13,8 +14,9 @@ export class AccountComponent implements OnInit, OnDestroy {
 
     user: User;
     accountType: boolean = false;
+    notify: boolean = false;
 
-    constructor( private us: UserService, private modalController: ModalController ) { }
+    constructor( private us: UserService, private modalController: ModalController, private ms: MessagingService ) { }
 
     ngOnInit() {
         this.us.userSubject
@@ -23,6 +25,9 @@ export class AccountComponent implements OnInit, OnDestroy {
                 if ( value ) {
                     this.user = value;
                     this.accountType = this.user.accountType;
+                    if ( value.notify ) {
+                        this.notify = value.notify;
+                    }
                 }
             } );
     }
@@ -31,8 +36,17 @@ export class AccountComponent implements OnInit, OnDestroy {
 
     dismiss() {
         this.user.accountType = this.accountType;
+        this.user.notify = this.notify;
         this.us.updateUser( this.user );
         this.modalController.dismiss()
             .then( () => console.log( "Account Settings Updated!" ) );
+    }
+
+    requestPermission() {
+        if ( !this.notify ) {
+            this.ms.getPermission();
+        } else {
+            this.ms.revokePermission();
+        }
     }
 }

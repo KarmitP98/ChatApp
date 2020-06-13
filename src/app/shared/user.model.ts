@@ -8,6 +8,8 @@ export class User {
         public chatIds: { chatId: string, with: string }[],
         public proPicUrl: string,
         public accountType: boolean,
-        public ghostMode: boolean
+        public ghostMode: boolean,
+        public notify: boolean,
+        public notiToken: string
     ) {}
 }

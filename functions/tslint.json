@@ -5,6 +5,7 @@
 
     // Force function overloads to be declared together. This ensures readers understand APIs.
     "adjacent-overload-signatures": true,
+
     // Do not allow the subtle/obscure comma operator.
     "ban-comma-operator": true,
     // Do not allow internal modules or namespaces . These are deprecated in favor of ES6 modules.

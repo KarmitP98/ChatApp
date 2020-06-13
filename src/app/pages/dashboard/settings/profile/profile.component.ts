@@ -39,11 +39,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.us.userSubject
             .pipe( untilDestroyed( this ) )
             .subscribe( value => {
-                this.user = value;
-                this.oldUserName = this.userName = value.userName;
-                this.oldUserEmail = this.userEmail = value.userEmail;
-                this.oldPhone = this.phone = value.phone;
-                this.proPicUrl = this.user.proPicUrl;
+                if ( value ) {
+                    this.user = value;
+                    this.oldUserName = this.userName = value.userName;
+                    this.oldUserEmail = this.userEmail = value.userEmail;
+                    this.oldPhone = this.phone = value.phone;
+                    this.proPicUrl = this.user.proPicUrl;
+                }
             } );
     }
 

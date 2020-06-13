@@ -39,7 +39,8 @@ export class SignUpPage implements OnInit {
 
     signUp(): void {
         this.us.signUp( this.userEmail, this.userPassword,
-                        new User( "", this.userName, this.userEmail, this.userPassword, this.phone, [], this.proPicUrl, true, false ) );
+                        new User( "", this.userName, this.userEmail, this.userPassword, this.phone, [], this.proPicUrl, true, false,
+                                  false, "" ) );
         // this.form.resetForm();
     }
 

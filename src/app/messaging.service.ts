@@ -1,13 +1,14 @@
-import { Injectable } from "@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
 import { AngularFireMessaging } from "@angular/fire/messaging";
 import { AngularFireFunctions } from "@angular/fire/functions";
 import { ToastController } from "@ionic/angular";
 import { tap } from "rxjs/operators";
 import { AngularFirestore } from "@angular/fire/firestore";
+import { untilDestroyed } from "@orchestrator/ngx-until-destroyed";
 
 
 @Injectable()
-export class MessagingService {
+export class MessagingService implements OnDestroy {
     token;
 
     constructor( private afm: AngularFireMessaging,
@@ -16,6 +17,8 @@ export class MessagingService {
                  private afs: AngularFirestore ) {
 
     }
+
+    ngOnDestroy(): void { }
 
     async makeToast( message ) {
         const toast = await this
@@ -31,14 +34,23 @@ export class MessagingService {
     }
 
     getPermission() {
-        // this.afm.deleteToken( this.token );
 
-        return this.afm.requestToken.pipe(
-            // tap( token => {
-            //     this.token = token;
-            //     console.log( this.token );
-            // } )
+        this.revokePermission();
+
+        this.afm.requestToken.pipe(
+            tap( token => {
+                this.token = token;
+                console.log( this.token );
+            } )
         ).subscribe( value => {console.log( value );} );
+    }
+
+    revokePermission() {
+        this.afm.getToken
+            .pipe( untilDestroyed( this ) )
+            .subscribe( token => {
+                this.afm.deleteToken( token );
+            } );
     }
 
     showMessages() {

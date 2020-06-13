@@ -92,7 +92,8 @@ export class ChatPage implements OnInit, OnDestroy {
         if ( this.text.length > 0 ) {
             const text: TextModel = {
                 chatId: this.chatId,
-                textId: "Random",
+                textId: this.user.userName + "->" + this.user2.userName,        // Can be used as a replacement for 'to' and 'for' in
+                // notifications
                 content: this.text,
                 to: this.user2.userId,
                 from: this.user.userId,

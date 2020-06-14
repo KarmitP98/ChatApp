@@ -48,7 +48,7 @@ export class ChatPage implements OnInit, OnDestroy {
         this.us.fetchChats( "chatId", this.chatId )
             .pipe( untilDestroyed( this ) )
             .subscribe( ( value ) => {
-                if ( value.length > 0 && this.user && this.user2 ) {
+                if ( value.length > 0 && this.user ) {
                     this.chat = value[0];
                     this.messages = this.chat.messages;
                     for ( let message of this.chat.messages ) {
@@ -56,6 +56,7 @@ export class ChatPage implements OnInit, OnDestroy {
                             message.status = TEXT_STATUS.read;
                         }
                     }
+                    console.log( this.chat );
                     this.us.updateChat( this.chat );
                 }
             } );

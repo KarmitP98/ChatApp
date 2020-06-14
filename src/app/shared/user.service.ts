@@ -85,15 +85,19 @@ export class UserService {
                         .then( () => console.log( value[0].userName + " has logged in!" ) );
                     sub.unsubscribe();
                 } );
-            } ).catch( () => new Toast( "Invalid user credentials!", 2000 ).show() );
+            } ).catch( () => {
+            new Toast( "Invalid user credentials!", 2000 ).show();
+            this.loadingSubject.next( false );
+        } );
     }
 
     signUp( email: string, password: string, user: User ) {
         this.loadingSubject.next( true );
         this.fireAuth
             .createUserWithEmailAndPassword( email, password )
-            .catch( function( error ) {
+            .catch( ( error ) => {
                 console.log( "User could not be added!" );
+                this.loadingSubject.next( false );
             } )
             .then( () => this.addNewUser( user ) );
     }

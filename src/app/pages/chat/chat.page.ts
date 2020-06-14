@@ -8,6 +8,7 @@ import { untilDestroyed } from "@orchestrator/ngx-until-destroyed";
 import { TextModel } from "../../shared/text.model";
 import { TEXT_STATUS } from "../../shared/shared";
 import { MessagingService } from "../../messaging.service";
+import { AngularFireMessaging } from "@angular/fire/messaging";
 
 @Component( {
                 selector: "app-chat",
@@ -25,7 +26,11 @@ export class ChatPage implements OnInit, OnDestroy {
     @ViewChild( "content" ) content: IonContent;
     bottom: any;
 
-    constructor( private router: Router, private us: UserService, private route: ActivatedRoute, private ms: MessagingService ) { }
+    constructor( private router: Router,
+                 private us: UserService,
+                 private route: ActivatedRoute,
+                 private ms: MessagingService,
+                 private afm: AngularFireMessaging ) { }
 
     ngOnInit() {
 
@@ -56,12 +61,14 @@ export class ChatPage implements OnInit, OnDestroy {
                             message.status = TEXT_STATUS.read;
                         }
                     }
-                    console.log( this.chat );
+                    // console.log( this.chat );
                     this.us.updateChat( this.chat );
                 }
             } );
 
         setTimeout( () => {this.content.scrollToBottom( 500 );}, 500 );
+
+        this.checkMessages();
 
     }
 
@@ -120,5 +127,13 @@ export class ChatPage implements OnInit, OnDestroy {
     scrollToBottom(): void {
         this.content.scrollToBottom()
             .then( () => console.log( "Messages have been loaded!" ) );
+    }
+
+    private checkMessages(): void {
+        this.afm.messages
+            .subscribe( message => {
+                console.log( "Message Received!" );
+                console.log( message );
+            } );
     }
 }

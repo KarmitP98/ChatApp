@@ -71,6 +71,5 @@ export class AccountComponent implements OnInit, OnDestroy {
                     this.user.notify = false;
                 } );
         }
-        console.log( this.user );
     }
 }

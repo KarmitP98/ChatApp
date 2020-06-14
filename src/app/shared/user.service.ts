@@ -63,6 +63,7 @@ export class UserService {
     userRef = this.afs.collection<User>( "users" );
     chatRef = this.afs.collection<ChatModel>( "chats" );
     private tokenExpirationTimer: any;
+    loadingSubject = new BehaviorSubject<boolean>( false );
 
     constructor( private store: AngularFireDatabase,
                  private router: Router,
@@ -73,11 +74,13 @@ export class UserService {
 
 
     login( email: string, password: string ) {
+        this.loadingSubject.next( true );
         this.fireAuth.signInWithEmailAndPassword( email, password )
             .then( () => {
                 let sub = this.fetchUsers( "userEmail", email ).subscribe( ( value: User[] ) => {
                     this.userSubject.next( value[0] );
                     localStorage.setItem( "userData", JSON.stringify( value[0].userId ) );
+                    this.loadingSubject.next( false );
                     this.router.navigate( [ "/dashboard" ] )
                         .then( () => console.log( value[0].userName + " has logged in!" ) );
                     sub.unsubscribe();
@@ -86,6 +89,7 @@ export class UserService {
     }
 
     signUp( email: string, password: string, user: User ) {
+        this.loadingSubject.next( true );
         this.fireAuth
             .createUserWithEmailAndPassword( email, password )
             .catch( function( error ) {
@@ -133,6 +137,7 @@ export class UserService {
                 console.log( "User has been added" );
                 this.userSubject.next( user );
                 localStorage.setItem( "userData", JSON.stringify( user.userId ) );
+                this.loadingSubject.next( false );
                 this.router.navigate( [ "/dashboard" ] ).then( () => console.log( "New User has signed up!" ) );
             } )
             .catch(

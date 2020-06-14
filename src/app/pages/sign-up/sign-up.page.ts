@@ -27,7 +27,7 @@ export class SignUpPage implements OnInit {
         initialSlide: 0
     };
 
-    constructor( private us: UserService,
+    constructor( public us: UserService,
                  private ms: MessagingService,
                  private camera: Camera,
                  private ref: ChangeDetectorRef,

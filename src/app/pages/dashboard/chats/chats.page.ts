@@ -11,6 +11,7 @@ import { BehaviorSubject } from "rxjs";
 import { take } from "rxjs/operators";
 import { PopoverController } from "@ionic/angular";
 import { ChatsOptions } from "./chat-options/chat-options.component";
+import { AngularFireMessaging } from "@angular/fire/messaging";
 
 @Component( {
                 selector: "app-chats",
@@ -24,11 +25,18 @@ export class ChatsPage implements OnInit, OnDestroy {
     users: string[] = [];
     message: BehaviorSubject<null>;
 
-    constructor( private us: UserService, private afs: AngularFirestore, private router: Router, private ms: MessagingService, private popoverController: PopoverController ) { }
+    constructor( private us: UserService,
+                 private afs: AngularFirestore,
+                 private afm: AngularFireMessaging,
+                 private router: Router,
+                 private ms: MessagingService,
+                 private popoverController: PopoverController ) { }
 
     ngOnInit() {
         this.fetchUser()
             .then( () => this.fetchChats() );
+
+        this.checkMessages();
     }
 
     async fetchUser() {
@@ -47,7 +55,7 @@ export class ChatsPage implements OnInit, OnDestroy {
             .subscribe( ( chats: ChatModel[] ) => {
                 if ( chats.length > 0 && this.user ) {
                     this.chats = [];
-                    console.log( chats );
+                    this.chats = [];
                     chats.forEach( chat => {
                         const unread = chat.messages.filter(
                             message => message.status !== TEXT_STATUS.read && message.to === this.user.userId ).length;
@@ -85,12 +93,21 @@ export class ChatsPage implements OnInit, OnDestroy {
     }
 
     async presentPopover( ev: any ) {
-        const popover = await this.popoverController.create( {
-                                                                 component: ChatsOptions,
-                                                                 event: ev,
-                                                                 backdropDismiss: true,
-                                                                 translucent: true
-                                                             } );
+        const popover = await this.popoverController
+                                  .create(
+                                      {
+                                          component: ChatsOptions,
+                                          event: ev,
+                                          backdropDismiss: true,
+                                          translucent: true
+                                      } );
         await popover.present();
+    }
+
+    checkMessages() {
+        this.afm.messages
+            .subscribe( message => {
+                console.log( message );
+            } );
     }
 }

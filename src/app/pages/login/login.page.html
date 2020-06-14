@@ -27,10 +27,17 @@
             <p style = "color: #4c8dff"> Don't have an account? Try
                 <a routerLink = "/signUp">
                     <b style = "color: #3a7be0">Sign-up</b></a></p>
-            <ion-button type = "submit"> Sign in
+            <ion-button [disabled] = "(us.loadingSubject |
+            async)" type = "submit">
+                Sign in
             </ion-button>
         </div>
     </form>
+    <ion-fab *ngIf = "us.loadingSubject |
+     async" horizontal = "center" style = "width: 100px; height: 50px;"
+             vertical = "center">
+        <ion-spinner color = "primary" name = "dots"></ion-spinner>
+    </ion-fab>
     <!--    <ion-buttons>-->
     <!--    <ion-button (click) = "ms.getPermission()"-->
     <!--                color = "primary">Request Permission-->

@@ -15,7 +15,7 @@ export class LoginPage implements OnInit {
     @ViewChild( "f", { static: false } ) f: NgForm;
     messages: any;
 
-    constructor( private us: UserService, private auth: AngularFireAuth, public ms: MessagingService ) { }
+    constructor( public us: UserService, private auth: AngularFireAuth, public ms: MessagingService ) { }
 
     ngOnInit() {
         this.auth.signOut()

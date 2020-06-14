@@ -69,17 +69,26 @@
                 <ion-icon name = "call" slot = "end"></ion-icon>
             </ion-item>
             <ion-fab horizontal = "start" vertical = "bottom">
-                <ion-fab-button (click) = "goToPage(0)" color = "warning">
+                <ion-fab-button (click) = "goToPage(0)" [disabled] = "(us.loadingSubject |
+            async)"
+                                color = "warning">
                     <ion-icon name = "arrow-back"></ion-icon>
                 </ion-fab-button>
             </ion-fab>
             <ion-fab *ngIf = "userPassword && userEmail && userName"
                      horizontal = "end"
                      vertical = "bottom">
-                <ion-fab-button (click) = "signUp()" color = "success">
+                <ion-fab-button (click) = "signUp()" [disabled] = "(us.loadingSubject |
+            async)"
+                                color = "success">
                     <ion-icon name = "arrow-forward"></ion-icon>
                 </ion-fab-button>
             </ion-fab>
         </ion-slide>
     </ion-slides>
+    <ion-fab *ngIf = "us.loadingSubject |
+     async" horizontal = "center" style = "width: 100px; height: 50px;"
+             vertical = "center">
+        <ion-spinner color = "primary" name = "dots"></ion-spinner>
+    </ion-fab>
 </ion-content>

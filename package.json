@@ -10,7 +10,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "ion": "ionic serve"
+    "ion4200": "ionic serve --port=4200",
+    "ion4201": "ionic serve --port=4201"
   },
   "private": true,
   "dependencies": {

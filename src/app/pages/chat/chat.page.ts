@@ -115,7 +115,7 @@ export class ChatPage implements OnInit, OnDestroy {
                     console.log( mId );
                 } );
 
-            this.content.scrollToBottom();
+            setTimeout( () => {this.content.scrollToBottom( 100 );}, 100 );
         }
     }
 

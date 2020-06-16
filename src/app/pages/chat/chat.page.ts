@@ -2,13 +2,14 @@ import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { User } from "../../shared/user.model";
 import { UserService } from "../../shared/user.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { IonContent } from "@ionic/angular";
+import { IonContent, ModalController } from "@ionic/angular";
 import { ChatModel } from "../../shared/chat.model";
 import { untilDestroyed } from "@orchestrator/ngx-until-destroyed";
 import { TextModel } from "../../shared/text.model";
 import { TEXT_STATUS } from "../../shared/shared";
 import { MessagingService } from "../../messaging.service";
 import { AngularFireMessaging } from "@angular/fire/messaging";
+import { ProfileDisplayComponent } from "../profile-display/profile-display.component";
 
 @Component( {
                 selector: "app-chat",
@@ -30,7 +31,8 @@ export class ChatPage implements OnInit, OnDestroy {
                  private us: UserService,
                  private route: ActivatedRoute,
                  private ms: MessagingService,
-                 private afm: AngularFireMessaging ) { }
+                 private afm: AngularFireMessaging,
+                 private mc: ModalController ) { }
 
     ngOnInit() {
 
@@ -112,7 +114,6 @@ export class ChatPage implements OnInit, OnDestroy {
             this.ms.sendMessage( this.user, this.user2, text )
                 .pipe( untilDestroyed( this ) )
                 .subscribe( mId => {
-                    console.log( mId );
                 } );
 
             setTimeout( () => {this.content.scrollToBottom( 100 );}, 100 );
@@ -135,5 +136,16 @@ export class ChatPage implements OnInit, OnDestroy {
                 console.log( "Message Received!" );
                 console.log( message );
             } );
+    }
+
+    async viewProfile() {
+
+        const modal = await this.mc.create(
+            {
+                component: ProfileDisplayComponent,
+                swipeToClose: true,
+                componentProps: { user: this.user2 }
+            } );
+        await modal.present();
     }
 }

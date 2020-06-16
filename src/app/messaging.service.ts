@@ -17,6 +17,7 @@ export class MessagingService implements OnDestroy {
                  private tc: ToastController,
                  private afs: AngularFirestore ) {
 
+        this.setBackgroundMessageListener();
     }
 
     ngOnDestroy(): void { }
@@ -78,8 +79,11 @@ export class MessagingService implements OnDestroy {
 
     sendMessage( user: User, user2: User, text: TextModel ) {
         return this.fun.httpsCallable( "notifyUser" )
-        ( { user: user, user2: user2, message: text } )
-                   .pipe( tap( tap => this.makeToast( tap ) ) );
+        ( { user: user, user2: user2, message: text } );
+
+    }
+
+    private setBackgroundMessageListener(): void {
 
     }
 }

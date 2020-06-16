@@ -1,0 +1,29 @@
+<ion-header>
+    <ion-toolbar color = "primary">
+        <ion-item color = "primary" lines = "none">
+            <ion-icon (click) = "dismiss()" name = "arrow-back" slot = "start">
+                <ion-ripple-effect></ion-ripple-effect>
+            </ion-icon>
+            <ion-title *ngIf = "user">{{user.userName}}</ion-title>
+        </ion-item>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <div *ngIf = "user" style = "width: 100%; margin-top: 20%">
+        <ion-avatar style = "margin: auto; width: 100px; height: 100px">
+            <ion-img [src] = "user.proPicUrl"></ion-img>
+        </ion-avatar>
+        <br>
+        <br>
+        <ion-item lines = "full">
+            <ion-label>User Name: &nbsp;&nbsp;{{user.userName}}</ion-label>
+        </ion-item>
+        <ion-item lines = "full">
+            <ion-label>User Email: &nbsp; &nbsp;{{user.userEmail}}</ion-label>
+        </ion-item>
+        <ion-item lines = "full">
+            <ion-label>Phone Number: &nbsp; &nbsp;{{user.phone}}</ion-label>
+        </ion-item>
+    </div>
+</ion-content>

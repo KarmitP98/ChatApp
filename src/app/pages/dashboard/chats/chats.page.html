@@ -13,6 +13,21 @@
     <div *ngIf = "chats.length > 0" [@slideLeft]>
         <ion-list>
             <ion-item-sliding *ngFor = "let chat of chats">
+                <ion-item-options side = "start">
+                    <ion-item-option (click) = "viewProfile(chat.otherUser)"
+                                     color = "primary">
+                        View Profile
+                    </ion-item-option>
+                </ion-item-options>
+                <ion-item-options side = "end">
+                    <ion-item-option (click) = "delete(chat)"
+                                     color = "danger">
+                        <ion-icon (click) = "deleteChat(chat.chatId)"
+                                  name = "trash-outline">
+                            Delete
+                        </ion-icon>
+                    </ion-item-option>
+                </ion-item-options>
                 <ion-item (click) = "startChat(chat)" button lines = "full">
                     <ion-avatar slot = "start">
                         <ion-img [src] = "chat.otherAvatar"></ion-img>
@@ -27,14 +42,6 @@
                         </ion-badge>
                     </ion-avatar>
                 </ion-item>
-                <ion-item-options side = "end">
-                    <ion-item-option (click) = "delete(chat)"
-                                     color = "danger">
-                        <ion-icon name = "trash-outline">
-                            Delete
-                        </ion-icon>
-                    </ion-item-option>
-                </ion-item-options>
             </ion-item-sliding>
         </ion-list>
     </div>

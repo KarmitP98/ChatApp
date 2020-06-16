@@ -18,9 +18,10 @@ import { AngularFireMessagingModule } from "@angular/fire/messaging";
 import { ServiceWorkerModule } from "@angular/service-worker";
 
 import { Camera } from "@ionic-native/camera/ngx";
+import { ProfileDisplayComponent } from "./pages/profile-display/profile-display.component";
 
 @NgModule( {
-               declarations: [ AppComponent ],
+               declarations: [ AppComponent, ProfileDisplayComponent ],
                entryComponents: [],
                imports: [ BrowserModule,
                           IonicModule.forRoot(),

@@ -9,9 +9,10 @@ import { Router } from "@angular/router";
 import { MessagingService } from "../../../messaging.service";
 import { BehaviorSubject } from "rxjs";
 import { take } from "rxjs/operators";
-import { PopoverController } from "@ionic/angular";
+import { ModalController, PopoverController } from "@ionic/angular";
 import { ChatsOptions } from "./chat-options/chat-options.component";
 import { AngularFireMessaging } from "@angular/fire/messaging";
+import { ProfileDisplayComponent } from "../../profile-display/profile-display.component";
 
 @Component( {
                 selector: "app-chats",
@@ -30,13 +31,14 @@ export class ChatsPage implements OnInit, OnDestroy {
                  private afm: AngularFireMessaging,
                  private router: Router,
                  private ms: MessagingService,
-                 private popoverController: PopoverController ) { }
+                 private popoverController: PopoverController,
+                 private mc: ModalController ) { }
 
     ngOnInit() {
         this.fetchUser()
             .then( () => this.fetchChats() );
 
-        this.checkMessages();
+        // this.checkMessages();
     }
 
     async fetchUser() {
@@ -109,5 +111,20 @@ export class ChatsPage implements OnInit, OnDestroy {
             .subscribe( message => {
                 console.log( message );
             } );
+    }
+
+    async viewProfile( user ) {
+
+        const modal = await this.mc.create(
+            {
+                component: ProfileDisplayComponent,
+                swipeToClose: true,
+                componentProps: { userName: user }
+            } );
+        await modal.present();
+    }
+
+    deleteChat( chatId: string ): void {
+        // this.us.deleteChat(chatId);
     }
 }

@@ -33,4 +33,9 @@ export class LoginPage implements OnInit {
     }
 
 
+    enter( $event: KeyboardEvent ): void {
+        if ( $event.key === "Enter" ) {
+            this.login();
+        }
+    }
 }

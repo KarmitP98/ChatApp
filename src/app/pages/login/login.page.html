@@ -19,7 +19,7 @@
             <ion-label position = "floating">Password</ion-label>
             <ion-input [(ngModel)] = "password" autocomplete = "on"
                        minlength = "6" name = "password" required
-                       type = "password">
+                       (keypress) = "enter($event)" type = "password">
             </ion-input>
             <ion-icon name = "eye-off" slot = "end"></ion-icon>
         </ion-item>

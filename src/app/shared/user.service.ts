@@ -194,6 +194,7 @@ export class UserService {
             .delete()
             .then( () => "Chat has been deleted!" )
             .catch( () => "Chat cannot be deleted!" );
+
     }
 
     // sendText( value: TextModel ) {

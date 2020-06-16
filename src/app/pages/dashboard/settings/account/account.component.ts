@@ -48,7 +48,6 @@ export class AccountComponent implements OnInit, OnDestroy {
      */
     changeAccountType() {
         this.user.accountType = this.accountType;
-        console.log( this.user );
     }
 
     /**

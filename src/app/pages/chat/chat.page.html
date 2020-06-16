@@ -1,13 +1,17 @@
 <ion-header>
     <ion-toolbar color = "primary">
-        <ion-item button color = "primary" lines = "none">
+        <ion-item color = "primary" lines = "none">
             <ion-icon (click) = "goBack()" name = "arrow-back" slot = "start">
+                <ion-ripple-effect></ion-ripple-effect>
             </ion-icon>
-            <ion-avatar *ngIf = "user2" slot = "start">
+            <ion-avatar (click) = "viewProfile()" *ngIf = "user2"
+                        slot = "start">
                 <ion-img [src] = "user2.proPicUrl"></ion-img>
             </ion-avatar>
-            <ion-label (click) = "scrollToBottom()"
-                       *ngIf = "user2">{{user2.userName}}</ion-label>
+            <ion-label (click) = "viewProfile()" *ngIf = "user2">
+                <ion-ripple-effect></ion-ripple-effect>
+                {{user2.userName}}
+            </ion-label>
         </ion-item>
     </ion-toolbar>
 </ion-header>

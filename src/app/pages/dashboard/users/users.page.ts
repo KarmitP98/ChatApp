@@ -50,41 +50,23 @@ export class UsersPage implements OnInit, OnDestroy {
         const actionSheet = await this.actionSheetController.create(
             {
                 header: user.userName,
-                cssClass: "custom-action-white",
+                cssClass: "users-action-sheet-class",
                 buttons: [ {
                     text: "Start Chat",
                     icon: "chatbubble-ellipses",
+                    cssClass: "users-action-item",
                     handler: () => {
                         this.startChat( user );
                     }
-                }
-                    // , {
-                    //     text: "Call",
-                    //     icon: "call",
-                    //     handler: () => {
-                    //         console.log( "Call clicked" );
-                    //     }
-                    // }, {
-                    //     text: "Video Call",
-                    //     icon: "videocam",
-                    //     handler: () => {
-                    //         console.log( "Video Call clicked" );
-                    //     }
-                    // }, {
-                    //     text: "Share",
-                    //     icon: "share-social",
-                    //     handler: () => {
-                    //         console.log( "Share clicked" );
-                    //     }
-                    // },
-                    , {
-                        text: "Cancel",
-                        icon: "close",
-                        role: "cancel",
-                        handler: () => {
-                            console.log( "Cancel clicked" );
-                        }
-                    } ]
+                }, {
+                    text: "Cancel",
+                    icon: "close",
+                    role: "cancel",
+                    cssClass: "users-action-item",
+                    handler: () => {
+                        console.log( "Cancel clicked" );
+                    }
+                } ]
             } );
         await actionSheet.present();
     }

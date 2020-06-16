@@ -1,6 +1,6 @@
 <ion-header>
     <ion-toolbar color = "primary">
-        <ion-title style = "color: white">Login</ion-title>
+        <ion-title>Login</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -8,28 +8,32 @@
 <ion-content [fullscreen] = "true" class = "ion-text-center">
     <form #f = "ngForm" (ngSubmit) = "login()">
         <ion-item>
-            <ion-label position = "floating">Email</ion-label>
+            <ion-label color = "primary" position = "floating">Email</ion-label>
             <ion-input [(ngModel)] = "email" autocomplete = "on"
                        email name = "userEmail" required
-                       type = "email"></ion-input>
-            <ion-icon name = "mail" slot = "end"></ion-icon>
+                       color = "primary" type = "email"></ion-input>
+            <ion-icon color = "primary" name = "mail" slot = "end"></ion-icon>
         </ion-item>
 
         <ion-item>
-            <ion-label position = "floating">Password</ion-label>
+            <ion-label color = "primary" position = "floating">Password
+            </ion-label>
             <ion-input [(ngModel)] = "password" autocomplete = "on"
-                       minlength = "6" name = "password" required
+                       color = "primary" minlength = "6" name = "password"
+                       required
                        (keypress) = "enter($event)" type = "password">
             </ion-input>
-            <ion-icon name = "eye-off" slot = "end"></ion-icon>
+            <ion-icon color = "primary" name = "eye-off"
+                      slot = "end"></ion-icon>
         </ion-item>
         <div>
-            <p style = "color: #4c8dff"> Don't have an account? Try
+            <p style = "color: var(--ion-color-primary)"> Don't have an account?
+                                                          Try
                 <a routerLink = "/signUp">
-                    <b style = "color: #3a7be0">Sign-up</b></a></p>
-            <ion-button [disabled] = "(us.loadingSubject |
-            async)" type = "submit">
-                Sign in
+                    <b style = "color: var(--ion-color-primary)">Sign-up</b></a>
+            </p>
+            <ion-button [disabled] = "(us.loadingSubject | async)"
+                        color = "primary" type = "submit"> Sign in
             </ion-button>
         </div>
     </form>
@@ -38,23 +42,5 @@
              vertical = "center">
         <ion-spinner color = "primary" name = "dots"></ion-spinner>
     </ion-fab>
-    <!--    <ion-buttons>-->
-    <!--    <ion-button (click) = "ms.getPermission()"-->
-    <!--                color = "primary">Request Permission-->
-    <!--    </ion-button>-->
-    <!--    <ion-button (click) = "ms.subs('test')" color = "primary">Subscribe to-->
-    <!--                                                              Topic-->
-    <!--    </ion-button>-->
-    <!--    <ion-button (click) = "ms.unsub('test')" color = "primary">Unsubscribe-->
-    <!--                                                               to Topic-->
-    <!--    </ion-button>-->
-    <!--    <ion-button (click) = "ms.sendMessage()" color = "primary">Send a-->
-    <!--                                                               message-->
-    <!--    </ion-button>-->
-    <!--    &lt;!&ndash;    </ion-buttons>&ndash;&gt;-->
-    <!--    <ion-list>-->
-    <!--        <ion-list-header>Messages</ion-list-header>-->
-    <!--        <ion-item>{{messages}}</ion-item>-->
-    <!--    </ion-list>-->
 </ion-content>
 

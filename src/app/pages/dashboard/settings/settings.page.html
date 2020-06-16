@@ -6,11 +6,14 @@
 
 <ion-content fullscreen = "true">
     <div *ngIf = "user" style = "width: 100%; margin-top: 10%;">
-        <ion-img [src] = "user.proPicUrl" style = "height: 100px;
-            width: 100px; margin: auto"></ion-img>
+        <ion-avatar style = "height: 100px;
+            width: 100px; margin: auto">
+            <ion-img [src] = "user.proPicUrl">
+            </ion-img>
+        </ion-avatar>
     </div>
-
-    <ion-list lines = "full">
+    <br><br><br>
+    <ion-list lines = "none">
         <ion-list-header><b>Settings</b></ion-list-header>
         <ion-item (click) = "editProfile()" button>Profile</ion-item>
         <ion-item (click) = "editPrivacy()" button>Privacy Settings</ion-item>

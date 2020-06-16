@@ -13,6 +13,7 @@ import { ModalController, PopoverController } from "@ionic/angular";
 import { ChatsOptions } from "./chat-options/chat-options.component";
 import { AngularFireMessaging } from "@angular/fire/messaging";
 import { ProfileDisplayComponent } from "../../profile-display/profile-display.component";
+import { ThemeService } from "../../../theme.service";
 
 @Component( {
                 selector: "app-chats",
@@ -25,6 +26,8 @@ export class ChatsPage implements OnInit, OnDestroy {
     chats: { lastMessage: string, otherUser: string, chatId: string, unread: number, otherAvatar: string }[] = [];
     users: string[] = [];
     message: BehaviorSubject<null>;
+    theme: string = "sunny";
+    lightMode: boolean = true;
 
     constructor( private us: UserService,
                  private afs: AngularFirestore,
@@ -32,13 +35,15 @@ export class ChatsPage implements OnInit, OnDestroy {
                  private router: Router,
                  private ms: MessagingService,
                  private popoverController: PopoverController,
-                 private mc: ModalController ) { }
+                 private mc: ModalController,
+                 private ts: ThemeService ) { }
 
     ngOnInit() {
         this.fetchUser()
             .then( () => this.fetchChats() );
 
-        // this.checkMessages();
+        this.changeTheme();
+
     }
 
     async fetchUser() {
@@ -126,5 +131,16 @@ export class ChatsPage implements OnInit, OnDestroy {
 
     deleteChat( chatId: string ): void {
         // this.us.deleteChat(chatId);
+    }
+
+    changeTheme() {
+        if ( this.lightMode ) {
+            this.ts.enableLight();
+            this.theme = "moon";
+        } else {
+            this.ts.enableDark();
+            this.theme = "sunny";
+        }
+        this.lightMode = !this.lightMode;
     }
 }

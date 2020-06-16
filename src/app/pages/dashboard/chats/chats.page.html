@@ -1,9 +1,12 @@
 <ion-header>
     <ion-toolbar color = "primary">
-        <ion-title color = "primary" style = "color: white">Chats</ion-title>
+        <ion-title>Chats</ion-title>
         <ion-buttons slot = "end">
             <ion-button (click) = "presentPopover($event)">
                 <ion-icon name = "ellipsis-vertical"></ion-icon>
+            </ion-button>
+            <ion-button (click) = "changeTheme()">
+                <ion-icon [name] = "theme"></ion-icon>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
@@ -14,8 +17,7 @@
         <ion-list>
             <ion-item-sliding *ngFor = "let chat of chats">
                 <ion-item-options side = "start">
-                    <ion-item-option (click) = "viewProfile(chat.otherUser)"
-                                     color = "primary">
+                    <ion-item-option (click) = "viewProfile(chat.otherUser)">
                         View Profile
                     </ion-item-option>
                 </ion-item-options>
@@ -28,7 +30,7 @@
                         </ion-icon>
                     </ion-item-option>
                 </ion-item-options>
-                <ion-item (click) = "startChat(chat)" button lines = "full">
+                <ion-item (click) = "startChat(chat)" button>
                     <ion-avatar slot = "start">
                         <ion-img [src] = "chat.otherAvatar"></ion-img>
                     </ion-avatar>
@@ -45,18 +47,4 @@
             </ion-item-sliding>
         </ion-list>
     </div>
-
-    <!--    <div *ngIf = "chats.length === 0" [@opacityUp]>-->
-    <!--        <div class = "container" style = "height: 100%; margin-top: auto;-->
-    <!--        margin-bottom: auto;">-->
-    <!--            <ion-card>-->
-    <!--                <ion-card-content color = "primary">-->
-    <!--                    Try being a human...<br>-->
-    <!--                    <b routerLink = "/dashboard/users">Talk-->
-    <!--                                                       to people!</b>-->
-    <!--                </ion-card-content>-->
-    <!--            </ion-card>-->
-    <!--        </div>-->
-    <!--    </div>-->
-
 </ion-content>

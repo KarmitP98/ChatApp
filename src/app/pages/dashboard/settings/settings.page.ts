@@ -17,7 +17,8 @@ export class SettingsPage implements OnInit, OnDestroy {
     userSub: Subscription;
     user: User;
 
-    constructor( private us: UserService, private modalController: ModalController ) { }
+    constructor( private us: UserService,
+                 private modalController: ModalController ) { }
 
     ngOnInit() {
         this.userSub = this.us.userSubject.subscribe( value => this.user = value );
@@ -60,4 +61,5 @@ export class SettingsPage implements OnInit, OnDestroy {
             } );
         await modal.present();
     }
+
 }

@@ -1,6 +1,6 @@
 <ion-header>
     <ion-toolbar color = "primary">
-        <ion-title style = "color: white">Sign Up</ion-title>
+        <ion-title>Sign Up</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -22,8 +22,7 @@
                 <ion-input [(ngModel)] = "userName" clearInput =
                         "true" name = "userName"
                            placeholder = "User Name"
-                           required
-                           type = "text">
+                           required type = "text">
                 </ion-input>
                 <ion-icon name = "person" slot = "end"></ion-icon>
             </ion-item>
@@ -33,7 +32,7 @@
                 </ion-fab-button>
             </ion-fab>
             <ion-fab horizontal = "end" vertical = "bottom">
-                <ion-fab-button (click) = "goToPage(1)" color = "primary">
+                <ion-fab-button (click) = "goToPage(1)" color = "warning">
                     <ion-icon name = "arrow-forward"></ion-icon>
                 </ion-fab-button>
             </ion-fab>
@@ -43,23 +42,20 @@
             <ion-item>
                 <ion-label position = "floating">Email</ion-label>
                 <ion-input [(ngModel)] = "userEmail" clearInput = "true"
-                           email name = "userEmail"
-                           placeholder = "Email"
-                           required
-                           type = "email"></ion-input>
+                           email name = "userEmail" placeholder = "Email"
+                           required type = "email"></ion-input>
                 <ion-icon name = "mail" slot = "end"></ion-icon>
             </ion-item>
             <ion-item>
                 <ion-label position = "floating">Password</ion-label>
                 <ion-input [(ngModel)] = "userPassword"
-                           clearInput = "true"
-                           minlength = "6"
+                           clearInput = "true" minlength = "6"
                            name = "password" placeholder = "Password"
                            required type = "password"></ion-input>
                 <ion-icon name = "eye-off" slot = "end"></ion-icon>
             </ion-item>
             <ion-item>
-                <ion-label position = "floating">#Phone Number
+                <ion-label position = "floating"># Phone Number
                 </ion-label>
                 <ion-input [(ngModel)] = "phone" name = "phone"
                            pattern = "[0-9]{3}[0-9]{3}[0-9]{4}"
@@ -69,17 +65,16 @@
                 <ion-icon name = "call" slot = "end"></ion-icon>
             </ion-item>
             <ion-fab horizontal = "start" vertical = "bottom">
-                <ion-fab-button (click) = "goToPage(0)" [disabled] = "(us.loadingSubject |
-            async)"
+                <ion-fab-button (click) = "goToPage(0)"
+                                [disabled] = "(us.loadingSubject | async)"
                                 color = "warning">
                     <ion-icon name = "arrow-back"></ion-icon>
                 </ion-fab-button>
             </ion-fab>
             <ion-fab *ngIf = "userPassword && userEmail && userName"
-                     horizontal = "end"
-                     vertical = "bottom">
-                <ion-fab-button (click) = "signUp()" [disabled] = "(us.loadingSubject |
-            async)"
+                     horizontal = "end" vertical = "bottom">
+                <ion-fab-button (click) = "signUp()"
+                                [disabled] = "(us.loadingSubject |async)"
                                 color = "success">
                     <ion-icon name = "arrow-forward"></ion-icon>
                 </ion-fab-button>
@@ -89,6 +84,6 @@
     <ion-fab *ngIf = "us.loadingSubject |
      async" horizontal = "center" style = "width: 100px; height: 50px;"
              vertical = "center">
-        <ion-spinner color = "primary" name = "dots"></ion-spinner>
+        <ion-spinner color = "warning"></ion-spinner>
     </ion-fab>
 </ion-content>

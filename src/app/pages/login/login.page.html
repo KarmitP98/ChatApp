@@ -8,39 +8,35 @@
 <ion-content [fullscreen] = "true" class = "ion-text-center">
     <form #f = "ngForm" (ngSubmit) = "login()">
         <ion-item>
-            <ion-label color = "primary" position = "floating">Email</ion-label>
+            <ion-label position = "floating">Email</ion-label>
             <ion-input [(ngModel)] = "email" autocomplete = "on"
                        email name = "userEmail" required
-                       color = "primary" type = "email"></ion-input>
-            <ion-icon color = "primary" name = "mail" slot = "end"></ion-icon>
+                       type = "email"></ion-input>
+            <ion-icon name = "mail" slot = "end"></ion-icon>
         </ion-item>
 
         <ion-item>
-            <ion-label color = "primary" position = "floating">Password
+            <ion-label position = "floating">Password
             </ion-label>
             <ion-input [(ngModel)] = "password" autocomplete = "on"
-                       color = "primary" minlength = "6" name = "password"
-                       required
+                       c minlength = "6" name = "password" required
                        (keypress) = "enter($event)" type = "password">
             </ion-input>
-            <ion-icon color = "primary" name = "eye-off"
-                      slot = "end"></ion-icon>
+            <ion-icon name = "eye-off" slot = "end"></ion-icon>
         </ion-item>
         <div>
-            <p style = "color: var(--ion-color-primary)"> Don't have an account?
-                                                          Try
-                <a routerLink = "/signUp">
-                    <b style = "color: var(--ion-color-primary)">Sign-up</b></a>
+            <p> Don't have an account? Try
+                <b routerLink = "/signUp">Sign-up</b>
             </p>
             <ion-button [disabled] = "(us.loadingSubject | async)"
-                        color = "primary" type = "submit"> Sign in
+                        color = "success" type = "submit"> Sign in
             </ion-button>
         </div>
     </form>
     <ion-fab *ngIf = "us.loadingSubject |
      async" horizontal = "center" style = "width: 100px; height: 50px;"
              vertical = "center">
-        <ion-spinner color = "primary" name = "dots"></ion-spinner>
+        <ion-spinner color = "warning"></ion-spinner>
     </ion-fab>
 </ion-content>
 

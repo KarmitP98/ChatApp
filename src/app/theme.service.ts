@@ -7,6 +7,8 @@ import { DOCUMENT } from "@angular/common";
 export class ThemeService {
 
     renderer: Renderer2;
+    theme: string = "moon";
+    lightMode: boolean = false;
 
     constructor( private rf: RendererFactory2,
                  @Inject( DOCUMENT ) private document: Document ) {
@@ -24,4 +26,16 @@ export class ThemeService {
         this.renderer.removeClass( this.document.body, "dark-theme" );
     }
 
+    changeTheme() {
+        this.lightMode = !this.lightMode;
+        if ( this.lightMode ) {
+            this.enableLight();
+            this.theme = "moon";
+            return this.theme;
+        } else {
+            this.enableDark();
+            this.theme = "sunny";
+            return this.theme;
+        }
+    }
 }

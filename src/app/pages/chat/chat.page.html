@@ -22,6 +22,7 @@
             <ion-card-content>No messages yet!</ion-card-content>
         </ion-card>
     </div>
+
     <div *ngIf = "messages.length > 0 && user && user2">
         <ion-list lines = "none">
             <ion-item *ngFor = "let message of messages" slot = "start"
@@ -41,10 +42,7 @@
                             user2.userName}}
                         </b>
                     </h5>
-                    <p>
-                        {{message.content}}
-
-                    </p>
+                    {{message.content}}
                     <div style = "width: 100%; text-align: right">
                         <ion-icon *ngIf = "message.status === 'Sent' &&
                               message.from === user.userId"
@@ -80,12 +78,10 @@
     <form #f = "ngForm" (ngSubmit) = "sentText()">
         <ion-item>
             <ion-input (keydown.enter) = "sentText()" [(ngModel)] = "text"
-                       color = "primary" name = "text"
-                       placeholder = "Enter a text">
+                       name = "text" placeholder = "Enter a text">
             </ion-input>
-            <ion-icon (click) = "sentText()" color = "primary"
-                      name = "paper-plane"
-                      slot = "end"></ion-icon>
+            <ion-icon (click) = "sentText()"
+                      name = "paper-plane" slot = "end"></ion-icon>
         </ion-item>
     </form>
 </ion-footer>

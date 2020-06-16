@@ -26,18 +26,6 @@
 @import "~@ionic/angular/css/flex-utils.css";
 @import "theme/custom-var";
 
-.custom-action-white {
-  .custom-action-button-green {
-    color: white;
-    background: #2dd36f;
-  }
-
-  .custom-action-button-blue {
-    color: white;
-    background: #3a7be0;
-  }
-}
-
 .users-action-sheet-class {
   .users-action-item {
     color: var(--ion-color-danger-contrast);

@@ -27,7 +27,6 @@ export class ChatsPage implements OnInit, OnDestroy {
     users: string[] = [];
     message: BehaviorSubject<null>;
     theme: string = "sunny";
-    lightMode: boolean = true;
 
     constructor( private us: UserService,
                  private afs: AngularFirestore,
@@ -36,13 +35,13 @@ export class ChatsPage implements OnInit, OnDestroy {
                  private ms: MessagingService,
                  private popoverController: PopoverController,
                  private mc: ModalController,
-                 private ts: ThemeService ) { }
+                 public ts: ThemeService ) { }
 
     ngOnInit() {
         this.fetchUser()
             .then( () => this.fetchChats() );
 
-        this.changeTheme();
+        this.theme = this.ts.changeTheme();
 
     }
 
@@ -133,14 +132,8 @@ export class ChatsPage implements OnInit, OnDestroy {
         // this.us.deleteChat(chatId);
     }
 
-    changeTheme() {
-        if ( this.lightMode ) {
-            this.ts.enableLight();
-            this.theme = "moon";
-        } else {
-            this.ts.enableDark();
-            this.theme = "sunny";
-        }
-        this.lightMode = !this.lightMode;
+
+    changeTheme(): void {
+        this.theme = this.ts.changeTheme();
     }
 }

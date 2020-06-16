@@ -62,8 +62,8 @@ export class UserService {
     userSubject = new BehaviorSubject<User>( null );
     userRef = this.afs.collection<User>( "users" );
     chatRef = this.afs.collection<ChatModel>( "chats" );
-    private tokenExpirationTimer: any;
     loadingSubject = new BehaviorSubject<boolean>( false );
+    private tokenExpirationTimer: any;
 
     constructor( private store: AngularFireDatabase,
                  private router: Router,

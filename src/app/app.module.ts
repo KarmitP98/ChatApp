@@ -17,8 +17,8 @@ import { MessagingService } from "./messaging.service";
 import { AngularFireMessagingModule } from "@angular/fire/messaging";
 import { ServiceWorkerModule } from "@angular/service-worker";
 
-import { Camera } from "@ionic-native/camera/ngx";
 import { ProfileDisplayComponent } from "./pages/profile-display/profile-display.component";
+import { FCM } from "@ionic-native/fcm/ngx";
 
 @NgModule( {
                declarations: [ AppComponent, ProfileDisplayComponent ],
@@ -37,7 +37,7 @@ import { ProfileDisplayComponent } from "./pages/profile-display/profile-display
                    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
                    AngularFirestore,
                    MessagingService,
-                   Camera
+                   FCM
                ],
                exports: [],
                bootstrap: [ AppComponent ]

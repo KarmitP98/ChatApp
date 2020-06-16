@@ -56,19 +56,18 @@ export class AccountComponent implements OnInit, OnDestroy {
     requestPermission() {
         if ( !this.notify ) {
             this.ms.getPermission()
-                .pipe( untilDestroyed( this ) )
-                .subscribe( token => {
+                .then( token => {
                     this.user.notiToken = token;
                     this.user.notify = true;
                 } );
         } else {
-            this.ms.revokePermission()
-                .pipe( untilDestroyed( this ) )
-                .subscribe( token => {
-                    this.afm.deleteToken( token );
-                    this.user.notiToken = "";
-                    this.user.notify = false;
-                } );
+            // this.ms.revokePermission()
+            //     .pipe( untilDestroyed( this ) )
+            //     .subscribe( token => {
+            //         this.afm.deleteToken( token );
+            this.user.notiToken = "";
+            this.user.notify = false;
+            // } );
         }
     }
 }

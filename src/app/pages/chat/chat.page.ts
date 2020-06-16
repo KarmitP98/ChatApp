@@ -130,14 +130,6 @@ export class ChatPage implements OnInit, OnDestroy {
             .then( () => console.log( "Messages have been loaded!" ) );
     }
 
-    private checkMessages(): void {
-        this.afm.messages
-            .subscribe( message => {
-                console.log( "Message Received!" );
-                console.log( message );
-            } );
-    }
-
     async viewProfile() {
 
         const modal = await this.mc.create(
@@ -147,5 +139,13 @@ export class ChatPage implements OnInit, OnDestroy {
                 componentProps: { user: this.user2 }
             } );
         await modal.present();
+    }
+
+    private checkMessages(): void {
+        this.afm.messages
+            .subscribe( message => {
+                console.log( "Message Received!" );
+                console.log( message );
+            } );
     }
 }

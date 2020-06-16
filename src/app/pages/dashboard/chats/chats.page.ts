@@ -11,9 +11,9 @@ import { BehaviorSubject } from "rxjs";
 import { take } from "rxjs/operators";
 import { ModalController, PopoverController } from "@ionic/angular";
 import { ChatsOptions } from "./chat-options/chat-options.component";
-import { AngularFireMessaging } from "@angular/fire/messaging";
 import { ProfileDisplayComponent } from "../../profile-display/profile-display.component";
 import { ThemeService } from "../../../theme.service";
+import { FCM } from "@ionic-native/fcm/ngx";
 
 @Component( {
                 selector: "app-chats",
@@ -30,18 +30,19 @@ export class ChatsPage implements OnInit, OnDestroy {
 
     constructor( private us: UserService,
                  private afs: AngularFirestore,
-                 private afm: AngularFireMessaging,
                  private router: Router,
                  private ms: MessagingService,
                  private popoverController: PopoverController,
                  private mc: ModalController,
-                 public ts: ThemeService ) { }
+                 public ts: ThemeService,
+                 private fcm: FCM ) { }
 
     ngOnInit() {
         this.fetchUser()
             .then( () => this.fetchChats() );
 
         this.theme = this.ts.changeTheme();
+        this.setBackgroundMessageListener();
 
     }
 
@@ -110,13 +111,6 @@ export class ChatsPage implements OnInit, OnDestroy {
         await popover.present();
     }
 
-    checkMessages() {
-        this.afm.messages
-            .subscribe( message => {
-                console.log( message );
-            } );
-    }
-
     async viewProfile( user ) {
 
         const modal = await this.mc.create(
@@ -135,5 +129,17 @@ export class ChatsPage implements OnInit, OnDestroy {
 
     changeTheme(): void {
         this.theme = this.ts.changeTheme();
+    }
+
+
+    private setBackgroundMessageListener(): void {
+        this.fcm.onNotification()
+            .subscribe( value => {
+                if ( value.wasTapped ) {
+
+                } else {
+                    console.log( value );
+                }
+            } );
     }
 }

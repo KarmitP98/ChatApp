@@ -6,6 +6,7 @@ import { tap } from "rxjs/operators";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { TextModel } from "./shared/text.model";
 import { User } from "./shared/user.model";
+import { FCM } from "@ionic-native/fcm/ngx";
 
 
 @Injectable()
@@ -15,9 +16,9 @@ export class MessagingService implements OnDestroy {
     constructor( private afm: AngularFireMessaging,
                  private fun: AngularFireFunctions,
                  private tc: ToastController,
-                 private afs: AngularFirestore ) {
+                 private afs: AngularFirestore,
+                 private fcm: FCM ) {
 
-        this.setBackgroundMessageListener();
     }
 
     ngOnDestroy(): void { }
@@ -37,12 +38,12 @@ export class MessagingService implements OnDestroy {
 
     // Returns an observable that contains the token
     getPermission() {
-        return this.afm.requestToken;
+        return this.fcm.getToken();
     }
 
     // Return the token that will be used to remove the token string from the string
     revokePermission() {
-        return this.afm.getToken;
+        // return this.afm.getToken;
     }
 
     showMessages() {
@@ -83,7 +84,4 @@ export class MessagingService implements OnDestroy {
 
     }
 
-    private setBackgroundMessageListener(): void {
-
-    }
 }

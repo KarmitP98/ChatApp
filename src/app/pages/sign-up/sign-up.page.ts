@@ -3,8 +3,6 @@ import { UserService } from "../../shared/user.service";
 import { User } from "../../shared/user.model";
 import { NgForm } from "@angular/forms";
 import { MessagingService } from "../../messaging.service";
-import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
-import { storage } from "firebase";
 import { IonSlides, ModalController } from "@ionic/angular";
 import { AvatarComp } from "./avatar-comp/avatar-comp.component";
 import { Router } from "@angular/router";
@@ -29,7 +27,6 @@ export class SignUpPage implements OnInit {
 
     constructor( public us: UserService,
                  private ms: MessagingService,
-                 private camera: Camera,
                  private ref: ChangeDetectorRef,
                  private modalController: ModalController,
                  private router: Router ) { }
@@ -44,30 +41,30 @@ export class SignUpPage implements OnInit {
         // this.form.resetForm();
     }
 
-    async takePhoto() {
-        try {
-            // Defining camera options
-            const options: CameraOptions = {
-                quality: 50,
-                targetHeight: 600,
-                targetWidth: 600,
-                destinationType: this.camera.DestinationType.FILE_URI,
-                encodingType: this.camera.EncodingType.JPEG,
-                mediaType: this.camera.MediaType.PICTURE,
-                correctOrientation: true
-
-            };
-            const result = await this.camera.getPicture( options );
-            const image = "data:image/jpeg;base64," + result;
-
-            const pictures = storage().ref( "ProfilePictures/" + this.userName + "-pro-pic" );
-            pictures.putString( image, "data_url" );
-            this.ref.detectChanges();
-
-        } catch ( e ) {
-            console.error( e );
-        }
-    }
+    // async takePhoto() {
+    //     try {
+    //         // Defining camera options
+    //         const options: CameraOptions = {
+    //             quality: 50,
+    //             targetHeight: 600,
+    //             targetWidth: 600,
+    //             destinationType: this.camera.DestinationType.FILE_URI,
+    //             encodingType: this.camera.EncodingType.JPEG,
+    //             mediaType: this.camera.MediaType.PICTURE,
+    //             correctOrientation: true
+    //
+    //         };
+    //         const result = await this.camera.getPicture( options );
+    //         const image = "data:image/jpeg;base64," + result;
+    //
+    //         const pictures = storage().ref( "ProfilePictures/" + this.userName + "-pro-pic" );
+    //         pictures.putString( image, "data_url" );
+    //         this.ref.detectChanges();
+    //
+    //     } catch ( e ) {
+    //         console.error( e );
+    //     }
+    // }
 
     async presentModal() {
         const modal = await this.modalController.create(

@@ -13,8 +13,8 @@
         <ion-list-header><b>Privacy Controls</b></ion-list-header>
         <ion-item>
             <ion-label>Private Account</ion-label>
-            <ion-toggle [(ngModel)] = "accountType"
-                        (click) = "changeAccountType()"
+            <ion-toggle (click) = "changeAccountType()"
+                        [(ngModel)] = "accountType"
                         color = "warning"></ion-toggle>
         </ion-item>
         <ion-item>
